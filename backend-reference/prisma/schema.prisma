@@ -1,0 +1,106 @@
+// ============================================================
+// TutioLMS — Prisma Schema (NestJS Backend Reference)
+// PostgreSQL | Prisma ORM
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ──────────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  TEACHER
+}
+
+enum MaterialType {
+  PDF
+  NOTE
+  VIDEO
+}
+
+// ─── Models ─────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // bcrypt-hashed
+  name      String
+  phone     String?
+  imageUrl  String?
+  role      Role     @default(TEACHER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  materials LearningMaterial[]
+
+  @@map("users")
+}
+
+model Banner {
+  id        String   @id @default(uuid())
+  title     String
+  imageUrl  String
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("banners")
+}
+
+model Institution {
+  id        String         @id @default(uuid())
+  name      String
+  address   String
+  phone     String
+  mapUrl    String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  timetable TimetableRow[]
+
+  @@map("institutions")
+}
+
+model TimetableRow {
+  id            String      @id @default(uuid())
+  day           String
+  time          String
+  subject       String
+  level         String      // "O/L" | "A/L"
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  institutionId String
+
+  @@map("timetable_rows")
+}
+
+model LearningMaterial {
+  id         String       @id @default(uuid())
+  title      String
+  type       MaterialType
+  content    String       @db.Text
+  fileUrl    String?
+  subject    String
+  level      String       // "O/L" | "A/L"
+  uploader   User         @relation(fields: [uploaderId], references: [id])
+  uploaderId String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@map("learning_materials")
+}
+
+model SiteSetting {
+  key       String   @id    // e.g. "primaryHSL", "accentHSL", "navItems"
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}

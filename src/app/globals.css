@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* =============================================
+     * PRIMARY THEME COLOR — change only these values
+     * to restyle the entire site instantly.
+     * Format: H S% L%  (HSL channels, no commas)
+     * ============================================= */
+    --color-primary: 215 70% 25%;       /* Deep Navy Blue */
+    --color-primary-light: 215 70% 38%; /* Hover/lighter variant */
+    --color-primary-dark: 215 70% 15%;  /* Footer/deep variant */
+    --color-accent: 38 95% 53%;         /* Amber accent */
+
+    --font-sans: "Inter", system-ui, sans-serif;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    @apply text-gray-800 bg-white antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold leading-tight;
+  }
+}

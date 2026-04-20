@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SITEFUNCTIONS.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="tutiolms--site-functions--developer-guide">TutioLMS — Site Functions &amp; Developer Guide</h1>
+<blockquote>
+<p>Complete reference for how the project is structured, how each feature works, and how to run both the frontend and the planned NestJS backend.</p>
+</blockquote>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-project-overview">Project Overview</a></li>
+<li><a href="#2-technology-stack">Technology Stack</a></li>
+<li><a href="#3-how-to-start-the-project">How to Start the Project</a></li>
+<li><a href="#4-project-structure">Project Structure</a></li>
+<li><a href="#5-frontend-architecture">Frontend Architecture</a></li>
+<li><a href="#6-public-site--pages--features">Public Site — Pages &amp; Features</a></li>
+<li><a href="#7-admin-dashboard--pages--features">Admin Dashboard — Pages &amp; Features</a></li>
+<li><a href="#8-authentication--role-system">Authentication &amp; Role System</a></li>
+<li><a href="#9-data-layer">Data Layer</a></li>
+<li><a href="#10-theming--styling-system">Theming &amp; Styling System</a></li>
+<li><a href="#11-reusable-component-library">Reusable Component Library</a></li>
+<li><a href="#12-nestjs-backend-reference">NestJS Backend Reference</a></li>
+<li><a href="#13-database-schema-prisma">Database Schema (Prisma)</a></li>
+<li><a href="#14-api-endpoints-reference">API Endpoints Reference</a></li>
+<li><a href="#15-configuration-files">Configuration Files</a></li>
+<li><a href="#16-environment-variables">Environment Variables</a></li>
+<li><a href="#17-adding-new-features">Adding New Features</a></li>
+</ol>
+<hr>
+<h2 id="1-project-overview">1. Project Overview</h2>
+<p><strong>TutioLMS</strong> is a tuition management system for Mr. Kamal Perera — a mathematics and physics teacher with 3 learning centres across Sri Lanka (Colombo, Kandy, Gampaha).</p>
+<p>The system has two layers:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public-facing website</td>
+<td>Next.js 14 (App Router)</td>
+<td>Live — fully functional</td>
+</tr>
+<tr>
+<td>Admin dashboard</td>
+<td>Next.js 14 (same app, <code>/admin</code> route)</td>
+<td>Live — uses mock data</td>
+</tr>
+<tr>
+<td>Backend API</td>
+<td>NestJS + Prisma + PostgreSQL</td>
+<td>Reference code only — not yet integrated</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Current stage:</strong> The admin dashboard uses local React state and <code>localStorage</code> to simulate API calls. The <code>backend-reference/</code> folder contains the production-ready NestJS architecture to wire up when a real server is needed.</p>
+<hr>
+<h2 id="2-technology-stack">2. Technology Stack</h2>
+<h3 id="frontend-active">Frontend (Active)</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Next.js</strong></td>
+<td>14.2.14</td>
+<td>React framework, App Router, SSG</td>
+</tr>
+<tr>
+<td><strong>React</strong></td>
+<td>18</td>
+<td>UI rendering</td>
+</tr>
+<tr>
+<td><strong>TypeScript</strong></td>
+<td>5</td>
+<td>Type safety across all files</td>
+</tr>
+<tr>
+<td><strong>Tailwind CSS</strong></td>
+<td>3.4.1</td>
+<td>Utility-first styling</td>
+</tr>
+<tr>
+<td><strong>Lucide React</strong></td>
+<td>0.441.0</td>
+<td>Icon library (SVG icons)</td>
+</tr>
+<tr>
+<td><strong>react-colorful</strong></td>
+<td>5.6.1</td>
+<td>HSL color picker for Theme Editor</td>
+</tr>
+</tbody>
+</table>
+<h3 id="backend-reference-not-yet-integrated">Backend Reference (Not Yet Integrated)</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NestJS</strong></td>
+<td>Server framework (modules, controllers, guards)</td>
+</tr>
+<tr>
+<td><strong>Prisma ORM</strong></td>
+<td>Database access + schema management</td>
+</tr>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>Primary relational database</td>
+</tr>
+<tr>
+<td><strong>passport-jwt</strong></td>
+<td>JWT extraction from <code>Authorization</code> header</td>
+</tr>
+<tr>
+<td><strong>bcrypt</strong></td>
+<td>Password hashing</td>
+</tr>
+<tr>
+<td><strong>@nestjs/config</strong></td>
+<td>Environment variable management</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="3-how-to-start-the-project">3. How to Start the Project</h2>
+<h3 id="frontend-nextjs">Frontend (Next.js)</h3>
+<p><strong>Prerequisites:</strong></p>
+<ul>
+<li>Node.js 18 or higher</li>
+<li>npm (comes with Node.js)</li>
+</ul>
+<p><strong>Step 1 — Install dependencies</strong></p>
+<pre class="hljs"><code><div><span class="hljs-built_in">cd</span> c:/Users/AVONET/Desktop/lms
+npm install
+</div></code></pre>
+<p><strong>Step 2 — Run development server</strong></p>
+<pre class="hljs"><code><div>npm run dev
+</div></code></pre>
+<p>The site starts at <strong>http://localhost:3000</strong></p>
+<p><strong>Step 3 — Open in browser</strong></p>
+<ul>
+<li>Public site: http://localhost:3000</li>
+<li>Admin login: http://localhost:3000/admin</li>
+</ul>
+<p><strong>Other available scripts:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npm run dev</code></td>
+<td>Start development server with hot reload</td>
+</tr>
+<tr>
+<td><code>npm run build</code></td>
+<td>Build optimised production bundle</td>
+</tr>
+<tr>
+<td><code>npm run start</code></td>
+<td>Start production server (after build)</td>
+</tr>
+<tr>
+<td><code>npm run lint</code></td>
+<td>Run ESLint on all source files</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="backend-nestjs--setup-guide-for-production">Backend (NestJS — Setup Guide for Production)</h3>
+<p>The backend is provided as reference code in <code>backend-reference/</code>. Follow these steps to set it up as a real server:</p>
+<p><strong>Step 1 — Create a new NestJS project</strong></p>
+<pre class="hljs"><code><div>npm install -g @nestjs/cli
+nest new tutiolms-api
+<span class="hljs-built_in">cd</span> tutiolms-api
+</div></code></pre>
+<p><strong>Step 2 — Install required packages</strong></p>
+<pre class="hljs"><code><div>npm install @nestjs/passport @nestjs/jwt passport passport-jwt bcrypt @nestjs/config
+npm install -D @types/passport-jwt @types/bcrypt
+npm install @prisma/client prisma
+</div></code></pre>
+<p><strong>Step 3 — Copy backend-reference files</strong>
+Copy all files from <code>backend-reference/</code> into your new NestJS project:</p>
+<pre class="hljs"><code><div>backend-reference/prisma/schema.prisma  →  prisma/schema.prisma
+backend-reference/src/auth/            →  src/auth/
+backend-reference/src/banners/         →  src/banners/
+backend-reference/src/learning-materials/ → src/learning-materials/
+backend-reference/src/site-settings/  →  src/site-settings/
+</div></code></pre>
+<p><strong>Step 4 — Create a <code>.env</code> file</strong> in the NestJS project root:</p>
+<pre class="hljs"><code><div>DATABASE_URL=&quot;postgresql://username:password@localhost:5432/tutiolms&quot;
+JWT_SECRET=&quot;your-secret-key-minimum-32-chars&quot;
+JWT_EXPIRES_IN=&quot;7d&quot;
+PORT=4000
+</div></code></pre>
+<p><strong>Step 5 — Set up the database</strong></p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Create database tables from schema</span>
+npx prisma migrate dev --name init
+
+<span class="hljs-comment"># Seed initial admin user</span>
+npx prisma db seed
+</div></code></pre>
+<p><strong>Step 6 — Start the API server</strong></p>
+<pre class="hljs"><code><div>npm run start:dev
+</div></code></pre>
+<p>API server starts at <strong>http://localhost:4000</strong></p>
+<p><strong>Step 7 — Connect frontend to API</strong>
+In the Next.js project, replace mock data imports with real <code>fetch()</code> calls to <code>http://localhost:4000</code>.</p>
+<hr>
+<h2 id="4-project-structure">4. Project Structure</h2>
+<pre class="hljs"><code><div>c:/Users/AVONET/Desktop/lms/
+│
+├── src/
+│   ├── app/                         # Next.js App Router pages
+│   │   ├── layout.tsx               # Root HTML layout (metadata, PublicChrome)
+│   │   ├── globals.css              # CSS variables, Tailwind base, typography
+│   │   ├── page.tsx                 # Homepage (/)
+│   │   ├── not-found.tsx            # 404 error page
+│   │   ├── classes/page.tsx         # /classes
+│   │   ├── institutions/page.tsx    # /institutions
+│   │   ├── learning-centre/page.tsx # /learning-centre
+│   │   ├── contact/page.tsx         # /contact
+│   │   └── admin/                   # Admin dashboard (all /admin/* routes)
+│   │       ├── layout.tsx           # Admin shell (sidebar + header)
+│   │       ├── page.tsx             # /admin — login page
+│   │       ├── dashboard/page.tsx   # /admin/dashboard
+│   │       ├── banners/page.tsx     # /admin/banners
+│   │       ├── institutions/page.tsx# /admin/institutions
+│   │       ├── theme/page.tsx       # /admin/theme
+│   │       ├── teachers/page.tsx    # /admin/teachers
+│   │       ├── learning-centre/page.tsx # /admin/learning-centre
+│   │       └── profile/page.tsx     # /admin/profile
+│   │
+│   ├── components/                  # All React components
+│   │   ├── layout/
+│   │   │   ├── Navbar.tsx           # Public sticky navigation bar
+│   │   │   ├── Footer.tsx           # Public footer (3 columns)
+│   │   │   └── PublicChrome.tsx     # Conditionally shows/hides Navbar+Footer
+│   │   ├── home/
+│   │   │   ├── HeroCarousel.tsx     # Auto-rotating hero slider
+│   │   │   └── AboutSection.tsx     # About teacher + stats section
+│   │   ├── classes/
+│   │   │   ├── AccordionList.tsx    # Renders all 5 class category accordions
+│   │   │   └── AccordionItem.tsx    # Individual expandable accordion card
+│   │   ├── institutions/
+│   │   │   └── InstitutionCard.tsx  # Location card with timetable
+│   │   ├── learning-centre/
+│   │   │   └── DocumentCard.tsx     # Downloadable document card
+│   │   ├── contact/
+│   │   │   ├── PersonalContactCard.tsx     # Teacher profile + social links
+│   │   │   └── InstitutionContactCard.tsx  # Branch contact info card
+│   │   ├── ui/                      # Shared primitive components
+│   │   │   ├── Button.tsx           # Button (primary/outline/ghost, 3 sizes)
+│   │   │   ├── Card.tsx             # White card wrapper
+│   │   │   ├── Badge.tsx            # Label badge
+│   │   │   └── SectionHeading.tsx   # Page section title with underline
+│   │   └── admin/                   # Admin-only components
+│   │       ├── layout/
+│   │       │   ├── AdminSidebar.tsx # Role-filtered nav + logout
+│   │       │   └── AdminHeader.tsx  # Top bar with breadcrumb + user chip
+│   │       ├── shared/
+│   │       │   ├── DataTable.tsx    # Generic typed data table
+│   │       │   ├── Modal.tsx        # Portal modal with Escape-to-close
+│   │       │   ├── ProtectedRoute.tsx # Role-based route guard
+│   │       │   ├── PageHeader.tsx   # Page title + action button row
+│   │       │   ├── StatCard.tsx     # Stat KPI card with icon
+│   │       │   └── ConfirmDialog.tsx# Delete confirmation modal
+│   │       ├── banners/BannerForm.tsx
+│   │       ├── institutions/InstitutionForm.tsx
+│   │       ├── teachers/TeacherForm.tsx
+│   │       ├── learning-centre/MaterialForm.tsx
+│   │       ├── profile/ProfileForm.tsx
+│   │       └── theme/ThemeEditor.tsx
+│   │
+│   ├── contexts/
+│   │   └── AuthContext.tsx          # React context for auth state + mock login
+│   │
+│   ├── data/                        # Static data (replaces database for now)
+│   │   ├── navigation.ts            # Public nav menu items
+│   │   ├── slides.ts                # Hero carousel slide content
+│   │   ├── classes.ts               # All 5 class categories with schedules
+│   │   ├── institutions.ts          # 3 learning centre locations + timetables
+│   │   ├── documents.ts             # 9 downloadable learning materials
+│   │   ├── contact.ts               # Teacher + institution contact details
+│   │   └── admin/                   # Mock data for admin dashboard
+│   │       ├── mockUsers.ts         # Login credentials + user records
+│   │       ├── mockBanners.ts       # 3 sample carousel banners
+│   │       ├── mockTeachers.ts      # 2 teacher records
+│   │       ├── mockMaterials.ts     # 8 learning materials
+│   │       └── mockSettings.ts      # Default theme + nav visibility settings
+│   │
+│   ├── types/
+│   │   ├── index.ts                 # Public site TypeScript interfaces
+│   │   └── admin.ts                 # Admin dashboard TypeScript interfaces
+│   │
+│   └── lib/
+│       └── icons.ts                 # Lucide icon name mappings
+│
+├── backend-reference/               # NestJS backend (reference — not integrated)
+│   ├── prisma/schema.prisma         # PostgreSQL schema (6 models)
+│   └── src/
+│       ├── auth/                    # JWT auth + RBAC system
+│       │   ├── roles.enum.ts
+│       │   ├── roles.decorator.ts
+│       │   ├── roles.guard.ts
+│       │   ├── jwt.strategy.ts
+│       │   └── auth.service.ts
+│       ├── banners/banners.controller.ts
+│       ├── learning-materials/learning-materials.controller.ts
+│       └── site-settings/site-settings.controller.ts
+│
+├── package.json
+├── tsconfig.json                    # TypeScript config (excludes backend-reference)
+├── tailwind.config.ts               # Custom color system + font config
+├── next.config.mjs                  # Image optimization disabled (unoptimized: true)
+└── postcss.config.js
+</div></code></pre>
+<hr>
+<h2 id="5-frontend-architecture">5. Frontend Architecture</h2>
+<h3 id="how-nextjs-app-router-works-here">How Next.js App Router Works Here</h3>
+<p>Every folder inside <code>src/app/</code> that contains a <code>page.tsx</code> becomes a URL route automatically:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/app/page.tsx</code></td>
+<td><code>/</code></td>
+</tr>
+<tr>
+<td><code>src/app/classes/page.tsx</code></td>
+<td><code>/classes</code></td>
+</tr>
+<tr>
+<td><code>src/app/admin/page.tsx</code></td>
+<td><code>/admin</code></td>
+</tr>
+<tr>
+<td><code>src/app/admin/banners/page.tsx</code></td>
+<td><code>/admin/banners</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Layouts</strong> wrap child pages. There are two layouts:</p>
+<ol>
+<li><strong><code>src/app/layout.tsx</code></strong> — Root layout. Applies to every page. Wraps children in <code>&lt;PublicChrome&gt;</code>.</li>
+<li><strong><code>src/app/admin/layout.tsx</code></strong> — Admin layout. Applies only to <code>/admin/**</code> pages. Provides the sidebar + header shell.</li>
+</ol>
+<h3 id="how-publicchrome-works">How PublicChrome Works</h3>
+<p><code>PublicChrome</code> (<code>src/components/layout/PublicChrome.tsx</code>) is a <code>&quot;use client&quot;</code> component that reads the current URL with <code>usePathname()</code>. If the URL starts with <code>/admin</code>, it renders the children directly with no Navbar or Footer. Otherwise it wraps children with the public <code>&lt;Navbar&gt;</code> and <code>&lt;Footer&gt;</code>.</p>
+<p>This is the only mechanism needed to completely separate public site chrome from the admin dashboard.</p>
+<h3 id="server-vs-client-components">Server vs Client Components</h3>
+<ul>
+<li><strong>Server components</strong> (default): pages that only render static HTML — e.g. <code>src/app/classes/page.tsx</code></li>
+<li><strong>Client components</strong> (marked <code>&quot;use client&quot;</code>): any component using <code>useState</code>, <code>useEffect</code>, <code>useRouter</code>, or browser APIs — e.g. all admin pages, <code>HeroCarousel</code>, <code>Navbar</code>, <code>AuthContext</code></li>
+</ul>
+<h3 id="import-alias">Import Alias</h3>
+<p>All imports use <code>@/</code> as a shortcut for <code>src/</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { useAuth } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/contexts/AuthContext&quot;</span>;     <span class="hljs-comment">// = src/contexts/AuthContext</span>
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">Banner</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/types/admin&quot;</span>;          <span class="hljs-comment">// = src/types/admin</span>
+<span class="hljs-keyword">import</span> { mockBanners } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/data/admin/mockBanners&quot;</span>; <span class="hljs-comment">// = src/data/admin/mockBanners</span>
+</div></code></pre>
+<hr>
+<h2 id="6-public-site--pages--features">6. Public Site — Pages &amp; Features</h2>
+<h3 id="home-page-">Home Page (<code>/</code>)</h3>
+<p><strong>Components used:</strong> <code>HeroCarousel</code>, <code>AboutSection</code></p>
+<p><strong>HeroCarousel features:</strong></p>
+<ul>
+<li>Displays 4 rotating slides (data from <code>src/data/slides.ts</code>)</li>
+<li>Auto-advances every 5 seconds</li>
+<li>Manual navigation with left/right arrows</li>
+<li>Dot indicators at the bottom</li>
+<li>Pauses on hover</li>
+<li>Each slide has a heading, subheading, background colour, and optional CTA button</li>
+</ul>
+<p><strong>AboutSection features:</strong></p>
+<ul>
+<li>Teacher profile image (left column)</li>
+<li>4 qualifications listed</li>
+<li>4 stat cards: 800+ students, 15 years experience, 95% pass rate, Top Teacher Award</li>
+<li>CTA button linking to <code>/contact</code></li>
+</ul>
+<hr>
+<h3 id="classes-page-classes">Classes Page (<code>/classes</code>)</h3>
+<p><strong>Component:</strong> <code>AccordionList</code> → <code>AccordionItem</code><br>
+<strong>Data source:</strong> <code>src/data/classes.ts</code></p>
+<p>Displays 5 class categories in expandable accordion cards:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Capacity</th>
+<th>Example Schedule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hall Classes</td>
+<td>80–100 students</td>
+<td>Saturday 8:00 AM – 11:00 AM</td>
+</tr>
+<tr>
+<td>Group Classes</td>
+<td>10–15 students</td>
+<td>Mon/Wed/Fri 4:00 PM – 6:00 PM</td>
+</tr>
+<tr>
+<td>Paper Classes</td>
+<td>Past paper practice</td>
+<td>Sunday 9:00 AM – 11:30 AM</td>
+</tr>
+<tr>
+<td>Revision Classes</td>
+<td>Intensive prep</td>
+<td>Before exam season</td>
+</tr>
+<tr>
+<td>Online Classes</td>
+<td>Zoom-based</td>
+<td>Flexible scheduling</td>
+</tr>
+</tbody>
+</table>
+<p>Each accordion card shows:</p>
+<ul>
+<li>Category name + icon + description</li>
+<li>Full schedule table (Subject, Level, Day, Time, Fee, Venue)</li>
+<li>Special notes section (e.g. &quot;Limited seats — register early&quot;)</li>
+</ul>
+<hr>
+<h3 id="institutions-page-institutions">Institutions Page (<code>/institutions</code>)</h3>
+<p><strong>Component:</strong> <code>InstitutionCard</code><br>
+<strong>Data source:</strong> <code>src/data/institutions.ts</code></p>
+<p>3 learning centres displayed as cards:</p>
+<table>
+<thead>
+<tr>
+<th>Institution</th>
+<th>Location</th>
+<th>Weekly Classes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Colombo Learning Hub</td>
+<td>45/B, Galle Road, Colombo 03</td>
+<td>6 sessions</td>
+</tr>
+<tr>
+<td>Kandy Education Centre</td>
+<td>12, Peradeniya Road, Kandy</td>
+<td>5 sessions</td>
+</tr>
+<tr>
+<td>Gampaha Study Circle</td>
+<td>78, Yakkala Road, Gampaha</td>
+<td>5 sessions</td>
+</tr>
+</tbody>
+</table>
+<p>Each card shows name, address, phone, map link, and embedded timetable with Day/Time/Subject/Level columns.</p>
+<hr>
+<h3 id="learning-centre-page-learning-centre">Learning Centre Page (<code>/learning-centre</code>)</h3>
+<p><strong>Component:</strong> <code>DocumentCard</code><br>
+<strong>Data source:</strong> <code>src/data/documents.ts</code></p>
+<p>9 downloadable resources grouped by type:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Document</th>
+<th>Level</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2023 A/L Combined Maths Past Paper</td>
+<td>A/L</td>
+<td>2.4 MB</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2022 A/L Combined Maths Past Paper</td>
+<td>A/L</td>
+<td>2.1 MB</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2023 A/L Physics Past Paper</td>
+<td>A/L</td>
+<td>3.1 MB</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2022 O/L Mathematics Past Paper</td>
+<td>O/L</td>
+<td>1.8 MB</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Calculus Model Answers Ch. 1–5</td>
+<td>A/L</td>
+<td>1.2 MB</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Mechanics Quick Reference Notes</td>
+<td>A/L</td>
+<td>890 KB</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Statistics &amp; Probability Revision Notes</td>
+<td>A/L</td>
+<td>1.5 MB</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2021 A/L Physics with Full Answers</td>
+<td>A/L</td>
+<td>4.2 MB</td>
+</tr>
+<tr>
+<td>9</td>
+<td>O/L Maths — Geometry &amp; Trigonometry</td>
+<td>O/L</td>
+<td>760 KB</td>
+</tr>
+</tbody>
+</table>
+<p>Each card has a download button linked to a static file in <code>/public/files/</code>.</p>
+<hr>
+<h3 id="contact-page-contact">Contact Page (<code>/contact</code>)</h3>
+<p><strong>Components:</strong> <code>PersonalContactCard</code>, <code>InstitutionContactCard</code><br>
+<strong>Data source:</strong> <code>src/data/contact.ts</code></p>
+<p><strong>Teacher card (Mr. Kamal Perera):</strong></p>
+<ul>
+<li>Profile header with name and title</li>
+<li>Clickable phone numbers (<code>tel:</code> links): +94 77 123 4567, +94 71 987 6543</li>
+<li>Clickable email (<code>mailto:</code> link): kamal.perera@tutiolms.lk</li>
+<li>Address: No. 22, Temple Road, Nugegoda, Colombo</li>
+<li>Social buttons: Facebook, YouTube, Instagram</li>
+<li>Qualifications list (4 items)</li>
+</ul>
+<p><strong>Institution cards (3 locations):</strong></p>
+<ul>
+<li>Numbered card header</li>
+<li>Address</li>
+<li>Phone numbers</li>
+<li>Operating hours</li>
+</ul>
+<hr>
+<h3 id="404-page-not-foundtsx">404 Page (<code>/not-found.tsx</code>)</h3>
+<p>Auto-displayed by Next.js for any unknown URL. Shows the TutioLMS branding with a &quot;Go to Home&quot; button.</p>
+<hr>
+<h2 id="7-admin-dashboard--pages--features">7. Admin Dashboard — Pages &amp; Features</h2>
+<p>Access the admin panel at: <strong>http://localhost:3000/admin</strong></p>
+<h3 id="login-page-admin">Login Page (<code>/admin</code>)</h3>
+<p>No sidebar — standalone centered card.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email</td>
+<td><code>input[type=email]</code></td>
+<td>Required</td>
+</tr>
+<tr>
+<td>Password</td>
+<td><code>input[type=password]</code></td>
+<td>Toggle show/hide</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Demo credentials:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Email</th>
+<th>Password</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Super Admin</td>
+<td>admin@tutiolms.lk</td>
+<td>Admin@1234</td>
+</tr>
+<tr>
+<td>Teacher</td>
+<td>teacher@tutiolms.lk</td>
+<td>Teacher@1234</td>
+</tr>
+</tbody>
+</table>
+<p>On successful login → redirects to <code>/admin/dashboard</code>. On failure → shows inline error message.</p>
+<hr>
+<h3 id="dashboard-admindashboard--both-roles">Dashboard (<code>/admin/dashboard</code>) — Both Roles</h3>
+<p><strong>SUPER_ADMIN view:</strong></p>
+<ul>
+<li>4 stat cards: Banners count, Institutions count, Teachers count, Materials count</li>
+<li>Recent Banners list (title + active/inactive badge)</li>
+<li>Institutions overview (name + class count)</li>
+</ul>
+<p><strong>TEACHER view:</strong></p>
+<ul>
+<li>&quot;My Materials&quot; count card (own uploads only)</li>
+<li>&quot;My Profile&quot; shortcut card</li>
+<li>Recent materials list (title + type + level)</li>
+</ul>
+<hr>
+<h3 id="banner-management-adminbanners--super-admin-only">Banner Management (<code>/admin/banners</code>) — Super Admin Only</h3>
+<p>Manages the hero carousel images shown on the homepage.</p>
+<p><strong>Table columns:</strong> Preview image, Title, Status (Active/Inactive), Created Date</p>
+<p><strong>Add/Edit Banner form fields:</strong></p>
+<ul>
+<li>Title (text)</li>
+<li>Image URL (text + live preview thumbnail)</li>
+<li>Active toggle (show/hide on carousel)</li>
+</ul>
+<p><strong>Actions:</strong> Add Banner button, Edit (pencil icon), Delete (trash icon with confirm dialog)</p>
+<hr>
+<h3 id="institution-management-admininstitutions--super-admin-only">Institution Management (<code>/admin/institutions</code>) — Super Admin Only</h3>
+<p>Manages the 3 learning centre locations and their class timetables.</p>
+<p><strong>Table columns:</strong> Institution name, Address, Phone, Class count</p>
+<p><strong>Add/Edit Institution form fields:</strong></p>
+<ul>
+<li>Name, Phone (grid row)</li>
+<li>Full Address</li>
+<li>Google Maps URL (optional)</li>
+<li>Dynamic timetable editor:
+<ul>
+<li>Add Row / Remove Row buttons</li>
+<li>Per row: Day, Time, Subject, Level (O/L or A/L dropdown)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="theme-settings-admintheme--super-admin-only">Theme Settings (<code>/admin/theme</code>) — Super Admin Only</h3>
+<p>Live colour customisation for the entire website.</p>
+<p><strong>Primary colour picker:</strong></p>
+<ul>
+<li>HSL colour wheel from <code>react-colorful</code></li>
+<li>Live colour swatch preview</li>
+<li>HSL values displayed (e.g. <code>HSL(215, 70%, 25%)</code>)</li>
+</ul>
+<p><strong>Accent colour picker:</strong></p>
+<ul>
+<li>Same HSL picker for the amber accent colour</li>
+</ul>
+<p><strong>Navigation visibility:</strong></p>
+<ul>
+<li>Toggle switch per nav item (Home, Institutions, Classes, Learning Centre, Contact)</li>
+<li>Controls which links appear in the public Navbar</li>
+</ul>
+<p><strong>Buttons:</strong></p>
+<ul>
+<li><strong>Apply Preview</strong> — immediately injects CSS variables into <code>document.documentElement.style</code> so colour changes are visible on the current page</li>
+<li><strong>Save Settings</strong> — persists the full settings object to <code>localStorage(&quot;admin_settings&quot;)</code></li>
+</ul>
+<hr>
+<h3 id="teacher-management-adminteachers--super-admin-only">Teacher Management (<code>/admin/teachers</code>) — Super Admin Only</h3>
+<p>Manages teacher/admin user records.</p>
+<p><strong>Table columns:</strong> Avatar, Name, Email, Phone, Subject, Role badge</p>
+<p><strong>Add/Edit Teacher form fields:</strong></p>
+<ul>
+<li>Profile image URL (with circular live preview)</li>
+<li>Full Name, Role dropdown (Teacher / Super Admin)</li>
+<li>Email, Phone (grid row)</li>
+<li>Subject (optional)</li>
+</ul>
+<p>New teachers are assigned a UUID via <code>crypto.randomUUID()</code>.</p>
+<hr>
+<h3 id="learning-centre-manager-adminlearning-centre--teacher-only">Learning Centre Manager (<code>/admin/learning-centre</code>) — Teacher Only</h3>
+<p>Teachers can only see and manage their own uploaded materials.</p>
+<p><strong>Table columns:</strong> Title, Subject, Level badge, Type badge (PDF/NOTE/VIDEO), Upload Date</p>
+<p><strong>Add/Edit Material form fields:</strong></p>
+<ul>
+<li>Title</li>
+<li>Subject, Level (O/L/A/L), Type (PDF/NOTE/VIDEO) — in a 3-column grid</li>
+<li><strong>Content editor</strong> — textarea with a formatting toolbar:
+<ul>
+<li><strong>B</strong> → wraps selected text in <code>**bold**</code></li>
+<li><em>I</em> → wraps selected text in <code>_italic_</code></li>
+<li>U → wraps selected text in <code>&lt;u&gt;underline&lt;/u&gt;</code></li>
+<li>Link → wraps selected text in <code>[text](url)</code></li>
+<li>Note: Markdown syntax — not a rendered WYSIWYG editor</li>
+</ul>
+</li>
+<li>File URL / PDF Link (optional)</li>
+</ul>
+<hr>
+<h3 id="profile-adminprofile--both-roles">Profile (<code>/admin/profile</code>) — Both Roles</h3>
+<p>Each user can update their own contact details.</p>
+<p><strong>Form fields:</strong></p>
+<ul>
+<li>Profile image URL (circular live preview)</li>
+<li>Full Name</li>
+<li>Email Address</li>
+<li>Phone Number</li>
+</ul>
+<p>On save: updates the <code>AuthContext</code> user object and writes back to <code>localStorage(&quot;admin_user&quot;)</code>. Changes persist across page refreshes.</p>
+<hr>
+<h2 id="8-authentication--role-system">8. Authentication &amp; Role System</h2>
+<h3 id="how-auth-works-current--mock">How Auth Works (Current — Mock)</h3>
+<pre class="hljs"><code><div>User enters credentials
+        ↓
+login() in AuthContext checks against MOCK_CREDENTIALS lookup
+        ↓
+If match → find AdminUser from MOCK_USERS array
+        ↓
+Store AdminUser JSON in localStorage(&quot;admin_user&quot;)
+        ↓
+Set user state in React context
+        ↓
+Admin layout redirects to /admin/dashboard
+</div></code></pre>
+<p><strong>On page load:</strong> <code>AuthContext</code> reads <code>localStorage(&quot;admin_user&quot;)</code> during a <code>useEffect</code> and restores the session without requiring re-login.</p>
+<p><strong>On logout:</strong> clears localStorage + state → redirects to <code>/admin</code>.</p>
+<h3 id="roles">Roles</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Value</th>
+<th>Access</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Super Admin</td>
+<td><code>&quot;SUPER_ADMIN&quot;</code></td>
+<td>All admin pages</td>
+</tr>
+<tr>
+<td>Teacher</td>
+<td><code>&quot;TEACHER&quot;</code></td>
+<td>Dashboard, Learning Centre, Profile</td>
+</tr>
+</tbody>
+</table>
+<h3 id="protectedroute-hoc">ProtectedRoute HOC</h3>
+<p>Every admin page wraps its content with <code>&lt;ProtectedRoute allowedRoles={[...]}&gt;</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Example — banners page (SUPER_ADMIN only)</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">BannersPage</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ProtectedRoute</span> <span class="hljs-attr">allowedRoles</span>=<span class="hljs-string">{[</span>&quot;<span class="hljs-attr">SUPER_ADMIN</span>&quot;]}&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">BannersContent</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ProtectedRoute</span>&gt;</span></span>
+  );
+}
+</div></code></pre>
+<p>If a TEACHER visits <code>/admin/banners</code>, <code>ProtectedRoute</code> silently redirects them to <code>/admin/dashboard</code>. If nobody is logged in, they are sent to <code>/admin</code> (login page).</p>
+<h3 id="admin-layout-redirect-logic">Admin Layout Redirect Logic</h3>
+<p><code>src/app/admin/layout.tsx</code> handles three cases on every navigation:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>On <code>/admin</code> (login page) AND authenticated</td>
+<td>Redirect to <code>/admin/dashboard</code></td>
+</tr>
+<tr>
+<td>On any <code>/admin/*</code> page AND NOT authenticated</td>
+<td>Redirect to <code>/admin</code></td>
+</tr>
+<tr>
+<td>On any <code>/admin/*</code> page AND authenticated</td>
+<td>Show sidebar + header shell</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="9-data-layer">9. Data Layer</h2>
+<h3 id="current-state-static-files--local-state">Current State: Static Files + Local State</h3>
+<p>All data is currently stored in TypeScript files under <code>src/data/</code>. The admin dashboard reads from these on initial render and keeps changes in React <code>useState</code> — no network calls.</p>
+<h3 id="public-data-files">Public Data Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Contents</th>
+<th>Used By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/data/navigation.ts</code></td>
+<td>5 nav items with labels and hrefs</td>
+<td><code>Navbar.tsx</code>, <code>AdminSidebar</code>, <code>mockSettings</code></td>
+</tr>
+<tr>
+<td><code>src/data/slides.ts</code></td>
+<td>4 hero carousel slides</td>
+<td><code>HeroCarousel.tsx</code></td>
+</tr>
+<tr>
+<td><code>src/data/classes.ts</code></td>
+<td>5 categories, 18 total class items</td>
+<td><code>AccordionList.tsx</code></td>
+</tr>
+<tr>
+<td><code>src/data/institutions.ts</code></td>
+<td>3 institutions with timetable arrays</td>
+<td><code>InstitutionCard.tsx</code>, <code>admin/institutions</code></td>
+</tr>
+<tr>
+<td><code>src/data/documents.ts</code></td>
+<td>9 downloadable materials</td>
+<td><code>DocumentCard.tsx</code>, <code>mockMaterials</code></td>
+</tr>
+<tr>
+<td><code>src/data/contact.ts</code></td>
+<td>Teacher + institution contact info</td>
+<td><code>PersonalContactCard.tsx</code>, <code>InstitutionContactCard.tsx</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="admin-mock-data-files">Admin Mock Data Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/data/admin/mockUsers.ts</code></td>
+<td>2 credential entries + 2 AdminUser records</td>
+</tr>
+<tr>
+<td><code>src/data/admin/mockBanners.ts</code></td>
+<td>3 banners (2 active, 1 inactive)</td>
+</tr>
+<tr>
+<td><code>src/data/admin/mockTeachers.ts</code></td>
+<td>2 teacher records (mirrors mockUsers)</td>
+</tr>
+<tr>
+<td><code>src/data/admin/mockMaterials.ts</code></td>
+<td>8 learning materials (seeded from documents.ts)</td>
+</tr>
+<tr>
+<td><code>src/data/admin/mockSettings.ts</code></td>
+<td>Default theme HSL values + all 5 nav items visible</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mock-credentials">Mock Credentials</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/data/admin/mockUsers.ts</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">MOCK_CREDENTIALS</span> = {
+  <span class="hljs-string">&quot;admin@tutiolms.lk&quot;</span>:   { <span class="hljs-attr">password</span>: <span class="hljs-string">&quot;Admin@1234&quot;</span>,   <span class="hljs-attr">userId</span>: <span class="hljs-string">&quot;user-001&quot;</span> },
+  <span class="hljs-string">&quot;teacher@tutiolms.lk&quot;</span>: { <span class="hljs-attr">password</span>: <span class="hljs-string">&quot;Teacher@1234&quot;</span>, <span class="hljs-attr">userId</span>: <span class="hljs-string">&quot;user-002&quot;</span> },
+};
+</div></code></pre>
+<h3 id="how-to-replace-mock-data-with-real-api">How to Replace Mock Data with Real API</h3>
+<p>When the NestJS backend is ready, replace static imports in each admin page:</p>
+<p><strong>Before (mock):</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { mockBanners } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/data/admin/mockBanners&quot;</span>;
+<span class="hljs-keyword">const</span> [banners, setBanners] = useState&lt;<span class="hljs-title class_">Banner</span>[]&gt;(mockBanners);
+</div></code></pre>
+<p><strong>After (real API):</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> [banners, setBanners] = useState&lt;<span class="hljs-title class_">Banner</span>[]&gt;([]);
+
+<span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&quot;http://localhost:4000/banners&quot;</span>, {
+    <span class="hljs-attr">headers</span>: { <span class="hljs-title class_">Authorization</span>: <span class="hljs-string">`Bearer <span class="hljs-subst">${token}</span>`</span> },
+  })
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> r.<span class="hljs-title function_">json</span>())
+    .<span class="hljs-title function_">then</span>(setBanners);
+}, []);
+</div></code></pre>
+<hr>
+<h2 id="10-theming--styling-system">10. Theming &amp; Styling System</h2>
+<h3 id="css-custom-properties-variables">CSS Custom Properties (Variables)</h3>
+<p>Defined in <code>src/app/globals.css</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-selector-pseudo">:root</span> {
+  <span class="hljs-attr">--color-primary</span>:       <span class="hljs-number">215</span> <span class="hljs-number">70%</span> <span class="hljs-number">25%</span>;   <span class="hljs-comment">/* Deep Navy Blue */</span>
+  <span class="hljs-attr">--color-primary-light</span>: <span class="hljs-number">215</span> <span class="hljs-number">70%</span> <span class="hljs-number">38%</span>;   <span class="hljs-comment">/* Hover state */</span>
+  <span class="hljs-attr">--color-primary-dark</span>:  <span class="hljs-number">215</span> <span class="hljs-number">70%</span> <span class="hljs-number">15%</span>;   <span class="hljs-comment">/* Footer background */</span>
+  <span class="hljs-attr">--color-accent</span>:        <span class="hljs-number">38</span>  <span class="hljs-number">95%</span> <span class="hljs-number">53%</span>;   <span class="hljs-comment">/* Amber gold */</span>
+}
+</div></code></pre>
+<p>These are HSL values without the <code>hsl()</code> wrapper. Tailwind reads them with the <code>/ &lt;alpha-value&gt;</code> pattern:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// tailwind.config.ts</span>
+<span class="hljs-attr">colors</span>: {
+  <span class="hljs-attr">primary</span>: {
+    <span class="hljs-attr">DEFAULT</span>: <span class="hljs-string">&quot;hsl(var(--color-primary) / &lt;alpha-value&gt;)&quot;</span>,
+    <span class="hljs-attr">light</span>:   <span class="hljs-string">&quot;hsl(var(--color-primary-light) / &lt;alpha-value&gt;)&quot;</span>,
+    <span class="hljs-attr">dark</span>:    <span class="hljs-string">&quot;hsl(var(--color-primary-dark) / &lt;alpha-value&gt;)&quot;</span>,
+  },
+  <span class="hljs-attr">accent</span>: {
+    <span class="hljs-attr">DEFAULT</span>: <span class="hljs-string">&quot;hsl(var(--color-accent) / &lt;alpha-value&gt;)&quot;</span>,
+  },
+}
+</div></code></pre>
+<h3 id="using-theme-colours-in-components">Using Theme Colours in Components</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">// Solid primary background</span>
+&lt;div className=<span class="hljs-string">&quot;bg-primary&quot;</span>&gt;...&lt;/div&gt;
+
+<span class="hljs-comment">// Primary with opacity</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;bg-primary/10&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>  <span class="hljs-comment">// 10% opacity navy</span>
+
+<span class="hljs-comment">// Primary-dark (footer)</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;bg-primary-dark&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Accent</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;text-accent&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>
+</div></code></pre>
+<h3 id="live-theme-updates-admin">Live Theme Updates (Admin)</h3>
+<p>The Theme Editor writes new HSL values directly to the DOM:</p>
+<pre class="hljs"><code><div><span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">style</span>.<span class="hljs-title function_">setProperty</span>(
+  <span class="hljs-string">&quot;--color-primary&quot;</span>,
+  <span class="hljs-string">`<span class="hljs-subst">${h}</span> <span class="hljs-subst">${s}</span>% <span class="hljs-subst">${l}</span>%`</span>
+);
+</div></code></pre>
+<p>This updates all Tailwind colour utilities that reference the variable instantly — no page reload needed.</p>
+<h3 id="admin-dashboard-styling-conventions">Admin Dashboard Styling Conventions</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Tailwind Classes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sidebar background</td>
+<td><code>bg-white border-r border-gray-200</code></td>
+</tr>
+<tr>
+<td>Active nav link</td>
+<td><code>bg-primary text-white rounded-lg</code></td>
+</tr>
+<tr>
+<td>Inactive nav link</td>
+<td><code>text-gray-600 hover:bg-gray-100 rounded-lg</code></td>
+</tr>
+<tr>
+<td>Page background</td>
+<td><code>bg-gray-50</code></td>
+</tr>
+<tr>
+<td>Content card</td>
+<td><code>bg-white rounded-xl border border-gray-200</code></td>
+</tr>
+<tr>
+<td>Table header</td>
+<td><code>bg-gray-50 text-xs uppercase text-gray-500 tracking-wider</code></td>
+</tr>
+<tr>
+<td>Form input</td>
+<td><code>border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none</code></td>
+</tr>
+<tr>
+<td>Danger button</td>
+<td><code>bg-red-500 hover:bg-red-600 text-white</code></td>
+</tr>
+<tr>
+<td>Active status badge</td>
+<td><code>bg-green-100 text-green-700</code></td>
+</tr>
+<tr>
+<td>Inactive status badge</td>
+<td><code>bg-gray-100 text-gray-500</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="11-reusable-component-library">11. Reusable Component Library</h2>
+<h3 id="public-ui-srccomponentsui">Public UI (<code>src/components/ui/</code>)</h3>
+<h4 id="button">Button</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> <span class="hljs-title class_">Button</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/components/ui/Button&quot;</span>;
+
+<span class="hljs-comment">// Variants: &quot;primary&quot; | &quot;outline&quot; | &quot;ghost&quot;</span>
+<span class="hljs-comment">// Sizes: &quot;sm&quot; | &quot;md&quot; | &quot;lg&quot;</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;primary&quot;</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;md&quot;</span>&gt;</span>Enroll Now<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;outline&quot;</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;sm&quot;</span>&gt;</span>Learn More<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+</div></code></pre>
+<h4 id="card">Card</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> <span class="hljs-title class_">Card</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/components/ui/Card&quot;</span>;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Card</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;p-6&quot;</span>&gt;</span>
+  Content here
+<span class="hljs-tag">&lt;/<span class="hljs-name">Card</span>&gt;</span></span>
+</div></code></pre>
+<h4 id="sectionheading">SectionHeading</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> <span class="hljs-title class_">SectionHeading</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/components/ui/SectionHeading&quot;</span>;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">SectionHeading</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Our Classes&quot;</span> <span class="hljs-attr">subtitle</span>=<span class="hljs-string">&quot;Choose the format that works for you&quot;</span> <span class="hljs-attr">centered</span> /&gt;</span></span>
+</div></code></pre>
+<hr>
+<h3 id="admin-shared-srccomponentsadminshared">Admin Shared (<code>src/components/admin/shared/</code>)</h3>
+<h4 id="datatable-generic">DataTable (Generic)</h4>
+<p>Accepts typed column definitions and typed row data:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> <span class="hljs-title class_">DataTable</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/components/admin/shared/DataTable&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">Column</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/types/admin&quot;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">columns</span>: <span class="hljs-title class_">Column</span>&lt;<span class="hljs-title class_">Banner</span>&gt;[] = [
+  { <span class="hljs-attr">key</span>: <span class="hljs-string">&quot;title&quot;</span>, <span class="hljs-attr">header</span>: <span class="hljs-string">&quot;Title&quot;</span> },
+  {
+    <span class="hljs-attr">key</span>: <span class="hljs-string">&quot;isActive&quot;</span>,
+    <span class="hljs-attr">header</span>: <span class="hljs-string">&quot;Status&quot;</span>,
+    <span class="hljs-attr">render</span>: <span class="hljs-function">(<span class="hljs-params">val</span>) =&gt;</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{val ? &quot;Active&quot; : &quot;Inactive&quot;}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>,
+  },
+];
+
+&lt;<span class="hljs-title class_">DataTable</span>&lt;<span class="hljs-title class_">Banner</span>&gt;
+  columns={columns}
+  data={banners}
+  onEdit={<span class="hljs-function">(<span class="hljs-params">row</span>) =&gt;</span> <span class="hljs-title function_">openEdit</span>(row)}
+  onDelete={<span class="hljs-function">(<span class="hljs-params">row</span>) =&gt;</span> <span class="hljs-title function_">setDeleteTarget</span>(row)}
+  emptyMessage=<span class="hljs-string">&quot;No banners yet.&quot;</span>
+/&gt;
+</div></code></pre>
+<h4 id="modal">Modal</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> <span class="hljs-title class_">Modal</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/components/admin/shared/Modal&quot;</span>;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Modal</span>
+  <span class="hljs-attr">isOpen</span>=<span class="hljs-string">{modalMode</span> !== <span class="hljs-string">null}</span>
+  <span class="hljs-attr">onClose</span>=<span class="hljs-string">{closeModal}</span>
+  <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Edit Banner&quot;</span>
+  <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;md&quot;</span>   // &quot;<span class="hljs-attr">sm</span>&quot; | &quot;<span class="hljs-attr">md</span>&quot; | &quot;<span class="hljs-attr">lg</span>&quot;
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">BannerForm</span> <span class="hljs-attr">...</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Modal</span>&gt;</span></span>
+</div></code></pre>
+<p>Closes on: backdrop click, Escape key, or manual <code>onClose()</code> call.</p>
+<h4 id="protectedroute">ProtectedRoute</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> <span class="hljs-title class_">ProtectedRoute</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/components/admin/shared/ProtectedRoute&quot;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">TeachersPage</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ProtectedRoute</span> <span class="hljs-attr">allowedRoles</span>=<span class="hljs-string">{[</span>&quot;<span class="hljs-attr">SUPER_ADMIN</span>&quot;]}&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">TeachersContent</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ProtectedRoute</span>&gt;</span></span>
+  );
+}
+</div></code></pre>
+<h4 id="statcard">StatCard</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> <span class="hljs-title class_">StatCard</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/components/admin/shared/StatCard&quot;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">BookOpen</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;lucide-react&quot;</span>;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">StatCard</span>
+  <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Materials&quot;</span>
+  <span class="hljs-attr">value</span>=<span class="hljs-string">{42}</span>
+  <span class="hljs-attr">icon</span>=<span class="hljs-string">{BookOpen}</span>
+  <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/admin/learning-centre&quot;</span>
+  <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;primary&quot;</span>   // &quot;<span class="hljs-attr">primary</span>&quot; | &quot;<span class="hljs-attr">accent</span>&quot; | &quot;<span class="hljs-attr">green</span>&quot; | &quot;<span class="hljs-attr">red</span>&quot;
+/&gt;</span></span>
+</div></code></pre>
+<h4 id="pageheader">PageHeader</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> <span class="hljs-title class_">PageHeader</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/components/admin/shared/PageHeader&quot;</span>;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">PageHeader</span>
+  <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Banner Management&quot;</span>
+  <span class="hljs-attr">subtitle</span>=<span class="hljs-string">&quot;Manage carousel banners shown on the homepage.&quot;</span>
+  <span class="hljs-attr">action</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{openAdd}</span>&gt;</span>Add Banner<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>}
+/&gt;</span>
+</div></code></pre>
+<hr>
+<h2 id="12-nestjs-backend-reference">12. NestJS Backend Reference</h2>
+<p>The files in <code>backend-reference/</code> provide a complete, production-ready NestJS architecture. They are <strong>excluded from TypeScript compilation</strong> (see <code>tsconfig.json</code>) because NestJS packages are not installed in this Next.js project.</p>
+<h3 id="rbac-implementation-pattern">RBAC Implementation Pattern</h3>
+<p><strong>Step 1 — Decorate your route with allowed roles:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-meta">@Get</span>()
+<span class="hljs-meta">@Roles</span>(<span class="hljs-title class_">Role</span>.<span class="hljs-property">SUPER_ADMIN</span>)        <span class="hljs-comment">// Only super admins can GET</span>
+<span class="hljs-title function_">findAll</span>(<span class="hljs-params"></span>) { ... }
+
+<span class="hljs-meta">@Get</span>(<span class="hljs-string">&#x27;me&#x27;</span>)
+<span class="hljs-meta">@Roles</span>(<span class="hljs-title class_">Role</span>.<span class="hljs-property">TEACHER</span>)            <span class="hljs-comment">// Only teachers can GET their own</span>
+<span class="hljs-title function_">findOwn</span>(<span class="hljs-params"><span class="hljs-meta">@Request</span>() req</span>) { ... }
+</div></code></pre>
+<p><strong>Step 2 — Apply guards to the controller:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-meta">@Controller</span>(<span class="hljs-string">&#x27;banners&#x27;</span>)
+<span class="hljs-meta">@UseGuards</span>(<span class="hljs-title class_">JwtAuthGuard</span>, <span class="hljs-title class_">RolesGuard</span>)   <span class="hljs-comment">// Auth first, then role check</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BannersController</span> { ... }
+</div></code></pre>
+<p><strong>Step 3 — JwtAuthGuard populates <code>req.user</code>:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-comment">// After JWT validation, req.user =</span>
+{ <span class="hljs-attr">id</span>: <span class="hljs-string">&quot;uuid&quot;</span>, <span class="hljs-attr">email</span>: <span class="hljs-string">&quot;admin@...&quot;</span>, <span class="hljs-attr">role</span>: <span class="hljs-string">&quot;SUPER_ADMIN&quot;</span> }
+</div></code></pre>
+<p><strong>Step 4 — RolesGuard reads <code>@Roles()</code> metadata and checks <code>req.user.role</code>.</strong></p>
+<h3 id="rbac-access-matrix">RBAC Access Matrix</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>SUPER_ADMIN</th>
+<th>TEACHER</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /banners</code></td>
+<td>All banners</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>POST /banners</code></td>
+<td>Create</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>PATCH /banners/:id</code></td>
+<td>Update any</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>DELETE /banners/:id</code></td>
+<td>Delete any</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>GET /institutions</code></td>
+<td>All</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>POST /institutions</code></td>
+<td>Create</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>PATCH /institutions/:id</code></td>
+<td>Update any</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>DELETE /institutions/:id</code></td>
+<td>Delete any</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>GET /learning-materials</code></td>
+<td>All materials</td>
+<td>Own materials only</td>
+</tr>
+<tr>
+<td><code>POST /learning-materials</code></td>
+<td>Create</td>
+<td>Create (auto-assigns uploaderId)</td>
+</tr>
+<tr>
+<td><code>PATCH /learning-materials/:id</code></td>
+<td>Update any</td>
+<td>Own materials only</td>
+</tr>
+<tr>
+<td><code>DELETE /learning-materials/:id</code></td>
+<td>Delete any</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>GET /site-settings</code></td>
+<td>All settings</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>PUT /site-settings/:key</code></td>
+<td>Update setting</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>POST /auth/login</code></td>
+<td>Public</td>
+<td>Public</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="13-database-schema-prisma">13. Database Schema (Prisma)</h2>
+<p>Located at <code>backend-reference/prisma/schema.prisma</code>.</p>
+<h3 id="models">Models</h3>
+<pre class="hljs"><code><div>User
+  id         UUID (PK)
+  email      String (unique)
+  password   String (bcrypt hash)
+  name       String
+  phone      String?
+  imageUrl   String?
+  role       Role enum (SUPER_ADMIN | TEACHER)
+  createdAt  DateTime
+  updatedAt  DateTime
+  materials  LearningMaterial[]
+
+Banner
+  id         UUID (PK)
+  title      String
+  imageUrl   String
+  isActive   Boolean (default: true)
+  sortOrder  Int (default: 0)
+  createdAt  DateTime
+  updatedAt  DateTime
+
+Institution
+  id         UUID (PK)
+  name       String
+  address    String
+  phone      String
+  mapUrl     String?
+  timetable  TimetableRow[]
+  createdAt  DateTime
+  updatedAt  DateTime
+
+TimetableRow
+  id            UUID (PK)
+  day           String
+  time          String
+  subject       String
+  level         String (&quot;O/L&quot; | &quot;A/L&quot;)
+  institution   Institution (FK, cascade delete)
+  institutionId UUID
+
+LearningMaterial
+  id         UUID (PK)
+  title      String
+  type       MaterialType enum (PDF | NOTE | VIDEO)
+  content    String (Text — long form)
+  fileUrl    String?
+  subject    String
+  level      String (&quot;O/L&quot; | &quot;A/L&quot;)
+  uploader   User (FK)
+  uploaderId UUID
+  createdAt  DateTime
+  updatedAt  DateTime
+
+SiteSetting
+  key        String (PK — e.g. &quot;primaryHSL&quot;, &quot;navItems&quot;)
+  value      Json
+  updatedAt  DateTime
+</div></code></pre>
+<h3 id="relationships">Relationships</h3>
+<ul>
+<li><code>User</code> → <code>LearningMaterial[]</code> (one-to-many: teacher uploads many materials)</li>
+<li><code>Institution</code> → <code>TimetableRow[]</code> (one-to-many, cascade delete)</li>
+</ul>
+<hr>
+<h2 id="14-api-endpoints-reference">14. API Endpoints Reference</h2>
+<p>Base URL (when backend is running): <code>http://localhost:4000</code></p>
+<p>All endpoints except <code>POST /auth/login</code> require:</p>
+<pre class="hljs"><code><div>Authorization: Bearer &lt;jwt_token&gt;
+</div></code></pre>
+<h3 id="authentication">Authentication</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Body</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/auth/login</code></td>
+<td>None</td>
+<td><code>{ email, password }</code></td>
+<td><code>{ access_token, user }</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="banners-super_admin-only">Banners (SUPER_ADMIN only)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Body</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/banners</code></td>
+<td>SUPER_ADMIN</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/banners/:id</code></td>
+<td>SUPER_ADMIN</td>
+<td>—</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/banners</code></td>
+<td>SUPER_ADMIN</td>
+<td><code>{ title, imageUrl, isActive }</code></td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/banners/:id</code></td>
+<td>SUPER_ADMIN</td>
+<td>Partial banner fields</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/banners/:id</code></td>
+<td>SUPER_ADMIN</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="institutions-super_admin-only">Institutions (SUPER_ADMIN only)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Body</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/institutions</code></td>
+<td>SUPER_ADMIN</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/institutions/:id</code></td>
+<td>SUPER_ADMIN</td>
+<td>—</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/institutions</code></td>
+<td>SUPER_ADMIN</td>
+<td><code>{ name, address, phone, mapUrl, timetable[] }</code></td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/institutions/:id</code></td>
+<td>SUPER_ADMIN</td>
+<td>Partial fields</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/institutions/:id</code></td>
+<td>SUPER_ADMIN</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="learning-materials-mixed-roles">Learning Materials (Mixed roles)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/learning-materials</code></td>
+<td>Both</td>
+<td>SUPER_ADMIN gets all; TEACHER gets own</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/learning-materials/:id</code></td>
+<td>Both</td>
+<td>TEACHER restricted to own</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/learning-materials</code></td>
+<td>Both</td>
+<td><code>uploaderId</code> auto-set from JWT</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/learning-materials/:id</code></td>
+<td>Both</td>
+<td>TEACHER restricted to own</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/learning-materials/:id</code></td>
+<td>SUPER_ADMIN</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="site-settings-super_admin-only">Site Settings (SUPER_ADMIN only)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Body</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/site-settings</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/site-settings/:key</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/site-settings/:key</code></td>
+<td><code>{ value: any }</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="15-configuration-files">15. Configuration Files</h2>
+<h3 id="packagejson--scripts--dependencies"><code>package.json</code> — Scripts &amp; Dependencies</h3>
+<pre class="hljs"><code><div><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span>   <span class="hljs-string">&quot;next dev&quot;</span><span class="hljs-punctuation">,</span>      <span class="hljs-comment">// Start dev server (hot reload)</span>
+    <span class="hljs-attr">&quot;build&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;next build&quot;</span><span class="hljs-punctuation">,</span>    <span class="hljs-comment">// Production build</span>
+    <span class="hljs-attr">&quot;start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;next start&quot;</span><span class="hljs-punctuation">,</span>    <span class="hljs-comment">// Start production server</span>
+    <span class="hljs-attr">&quot;lint&quot;</span><span class="hljs-punctuation">:</span>  <span class="hljs-string">&quot;next lint&quot;</span>      <span class="hljs-comment">// Run ESLint</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;dependencies&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;next&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;14.2.14&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;react&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^18&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;react-dom&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^18&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;lucide-react&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^0.441.0&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;react-colorful&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^5.6.1&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</div></code></pre>
+<h3 id="tsconfigjson--typescript"><code>tsconfig.json</code> — TypeScript</h3>
+<p>Key settings:</p>
+<ul>
+<li><code>&quot;strict&quot;: true</code> — full type checking enabled</li>
+<li><code>&quot;paths&quot;: { &quot;@/*&quot;: [&quot;./src/*&quot;] }</code> — import alias</li>
+<li><code>&quot;exclude&quot;: [&quot;node_modules&quot;, &quot;backend-reference&quot;]</code> — NestJS reference files excluded from Next.js compilation</li>
+<li><code>&quot;moduleResolution&quot;: &quot;bundler&quot;</code> — Next.js 14 bundler mode</li>
+</ul>
+<h3 id="tailwindconfigts--styling"><code>tailwind.config.ts</code> — Styling</h3>
+<p>Key customisations:</p>
+<ul>
+<li>Custom <code>primary</code> colour tokens (DEFAULT, light, dark) reading CSS variables</li>
+<li>Custom <code>accent</code> colour token</li>
+<li>Custom <code>fontFamily.sans</code> reading <code>--font-sans</code> CSS variable</li>
+<li>Custom <code>transitionProperty.max-height</code> for accordion animations</li>
+</ul>
+<h3 id="nextconfigmjs--nextjs"><code>next.config.mjs</code> — Next.js</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> nextConfig = {
+  <span class="hljs-attr">images</span>: { <span class="hljs-attr">unoptimized</span>: <span class="hljs-literal">true</span> }
+};
+</div></code></pre>
+<p><code>unoptimized: true</code> allows <code>&lt;img&gt;</code> tags with any external URL without domain whitelist configuration — useful for admin image URL inputs.</p>
+<hr>
+<h2 id="16-environment-variables">16. Environment Variables</h2>
+<h3 id="for-the-nextjs-frontend">For the Next.js Frontend</h3>
+<p>No environment variables are required for the current mock-data setup.</p>
+<p>When connecting to a real backend, create <code>.env.local</code> in the project root:</p>
+<pre class="hljs"><code><div>NEXT_PUBLIC_API_URL=http://localhost:4000
+</div></code></pre>
+<p>Usage in code:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`<span class="hljs-subst">${process.env.NEXT_PUBLIC_API_URL}</span>/banners`</span>);
+</div></code></pre>
+<h3 id="for-the-nestjs-backend">For the NestJS Backend</h3>
+<p>Create <code>.env</code> in the NestJS project root:</p>
+<pre class="hljs"><code><div># PostgreSQL connection string
+DATABASE_URL=&quot;postgresql://postgres:password@localhost:5432/tutiolms&quot;
+
+# JWT signing secret (minimum 32 characters — keep private)
+JWT_SECRET=&quot;change-this-to-a-random-secure-string-in-production&quot;
+
+# Token expiry
+JWT_EXPIRES_IN=&quot;7d&quot;
+
+# API server port
+PORT=4000
+</div></code></pre>
+<hr>
+<h2 id="17-adding-new-features">17. Adding New Features</h2>
+<h3 id="add-a-new-public-page">Add a New Public Page</h3>
+<ol>
+<li>Create <code>src/app/your-page/page.tsx</code></li>
+<li>Export a default React component</li>
+<li>Add data to <code>src/data/your-data.ts</code> if needed</li>
+<li>Add a nav link to <code>src/data/navigation.ts</code></li>
+</ol>
+<h3 id="add-a-new-admin-section-super_admin-only">Add a New Admin Section (SUPER_ADMIN only)</h3>
+<ol>
+<li>Add the nav item to <code>SUPER_ADMIN_NAV</code> in <code>src/components/admin/layout/AdminSidebar.tsx</code></li>
+<li>Add the breadcrumb label to <code>ROUTE_LABELS</code> in <code>AdminHeader.tsx</code></li>
+<li>Create <code>src/app/admin/your-section/page.tsx</code></li>
+<li>Wrap content with <code>&lt;ProtectedRoute allowedRoles={[&quot;SUPER_ADMIN&quot;]}&gt;</code></li>
+<li>Create <code>src/data/admin/mockYourData.ts</code> with seed data</li>
+<li>Create form component at <code>src/components/admin/your-section/YourForm.tsx</code></li>
+<li>Add TypeScript interface to <code>src/types/admin.ts</code></li>
+</ol>
+<h3 id="add-a-new-prisma-model-backend">Add a New Prisma Model (Backend)</h3>
+<ol>
+<li>Add the model to <code>backend-reference/prisma/schema.prisma</code></li>
+<li>Run <code>npx prisma migrate dev --name add-your-model</code> in the NestJS project</li>
+<li>Create <code>src/your-module/your-module.controller.ts</code> following the banner controller pattern</li>
+<li>Apply <code>@UseGuards(JwtAuthGuard, RolesGuard)</code> and <code>@Roles(...)</code> as needed</li>
+<li>Register the module in <code>src/app.module.ts</code></li>
+</ol>
+<h3 id="change-the-site-theme-colours">Change the Site Theme Colours</h3>
+<p><strong>Option A — Edit CSS variables (permanent):</strong>
+Open <code>src/app/globals.css</code> and change the HSL values:</p>
+<pre class="hljs"><code><div><span class="hljs-selector-pseudo">:root</span> {
+  <span class="hljs-attr">--color-primary</span>: <span class="hljs-number">260</span> <span class="hljs-number">70%</span> <span class="hljs-number">30%</span>;   <span class="hljs-comment">/* e.g. deep purple */</span>
+  <span class="hljs-attr">--color-accent</span>:  <span class="hljs-number">142</span> <span class="hljs-number">70%</span> <span class="hljs-number">45%</span>;   <span class="hljs-comment">/* e.g. green */</span>
+}
+</div></code></pre>
+<p><strong>Option B — Admin Theme Editor (session/localStorage):</strong>
+Log in as Super Admin → go to <code>/admin/theme</code> → adjust sliders → Save Settings.</p>
+<hr>
+<h2 id="quick-reference">Quick Reference</h2>
+<h3 id="admin-login">Admin Login</h3>
+<pre class="hljs"><code><div>URL:      http://localhost:3000/admin
+SuperAdmin: admin@tutiolms.lk / Admin@1234
+Teacher:    teacher@tutiolms.lk / Teacher@1234
+</div></code></pre>
+<h3 id="start-frontend">Start Frontend</h3>
+<pre class="hljs"><code><div><span class="hljs-built_in">cd</span> c:/Users/AVONET/Desktop/lms
+npm run dev
+<span class="hljs-comment"># → http://localhost:3000</span>
+</div></code></pre>
+<h3 id="build-for-production">Build for Production</h3>
+<pre class="hljs"><code><div>npm run build
+npm run start
+</div></code></pre>
+<h3 id="key-file-locations">Key File Locations</h3>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Site colours</td>
+<td><code>src/app/globals.css</code></td>
+</tr>
+<tr>
+<td>Navigation items</td>
+<td><code>src/data/navigation.ts</code></td>
+</tr>
+<tr>
+<td>Hero slides</td>
+<td><code>src/data/slides.ts</code></td>
+</tr>
+<tr>
+<td>Class schedules</td>
+<td><code>src/data/classes.ts</code></td>
+</tr>
+<tr>
+<td>Institution data</td>
+<td><code>src/data/institutions.ts</code></td>
+</tr>
+<tr>
+<td>Download documents</td>
+<td><code>src/data/documents.ts</code></td>
+</tr>
+<tr>
+<td>Teacher contact</td>
+<td><code>src/data/contact.ts</code></td>
+</tr>
+<tr>
+<td>Admin credentials</td>
+<td><code>src/data/admin/mockUsers.ts</code></td>
+</tr>
+<tr>
+<td>Admin types</td>
+<td><code>src/types/admin.ts</code></td>
+</tr>
+<tr>
+<td>Auth logic</td>
+<td><code>src/contexts/AuthContext.tsx</code></td>
+</tr>
+<tr>
+<td>DB schema</td>
+<td><code>backend-reference/prisma/schema.prisma</code></td>
+</tr>
+<tr>
+<td>RBAC guard</td>
+<td><code>backend-reference/src/auth/roles.guard.ts</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><em>Generated: April 2026 — TutioLMS v0.1.0</em></p>
+
+</body>
+</html>
