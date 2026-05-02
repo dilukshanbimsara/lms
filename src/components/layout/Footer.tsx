@@ -8,14 +8,14 @@ interface FooterProps {
   siteName?: string;
   siteTagline?: string;
   navItems?: NavItem[];
-  teacher?: FooterTeacher | null;
+  teacher?: FooterTeacher;
 }
 
 export default function Footer({
   siteName = DEFAULT_SITE_CONFIG.siteName,
   siteTagline = DEFAULT_SITE_CONFIG.siteTagline,
   navItems = [],
-  teacher = null,
+  teacher,
 }: FooterProps) {
   const year = new Date().getFullYear();
 

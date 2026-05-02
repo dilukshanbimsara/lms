@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import PublicChrome from "@/components/layout/PublicChrome";
 import { navItems as staticNavItems } from "@/data/navigation";
+import { personalContact } from "@/data/contact";
 import type { NavItem } from "@/types";
 import type { NavToggle, HslColor, FooterTeacher, SiteConfig, AboutContent } from "@/types/admin";
 import { DEFAULT_SITE_CONFIG, DEFAULT_ABOUT } from "@/types/admin";
@@ -73,27 +74,37 @@ async function getSiteConfig(): Promise<SiteConfig> {
   return DEFAULT_SITE_CONFIG;
 }
 
-async function getFooterTeacher(): Promise<FooterTeacher | null> {
+async function getFooterTeacher(): Promise<FooterTeacher> {
+  const dummy: FooterTeacher = {
+    name: DEFAULT_ABOUT.teacherName,
+    subject: DEFAULT_ABOUT.subject,
+    phone: personalContact.phone[0],
+    email: personalContact.email,
+    address: DEFAULT_ABOUT.address,
+  };
+
   try {
     const teacher = await prisma.user.findFirst({
       where: { role: "TEACHER" },
       select: { name: true, phone: true, email: true },
     });
-    if (!teacher) return null;
 
-    // Pull subject + address from aboutContent setting
     const aboutRow = await prisma.siteSetting.findUnique({ where: { key: "aboutContent" } });
     const about = (aboutRow?.value as unknown as AboutContent) ?? DEFAULT_ABOUT;
+
+    if (!teacher) {
+      return { ...dummy, subject: about.subject ?? dummy.subject, address: about.address ?? dummy.address };
+    }
 
     return {
       name: teacher.name,
       subject: about.subject ?? DEFAULT_ABOUT.subject,
-      phone: teacher.phone ?? "",
+      phone: teacher.phone ?? dummy.phone,
       email: teacher.email,
       address: about.address ?? DEFAULT_ABOUT.address,
     };
   } catch {
-    return null;
+    return dummy;
   }
 }
 

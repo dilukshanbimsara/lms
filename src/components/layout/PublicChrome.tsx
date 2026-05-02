@@ -11,7 +11,7 @@ interface PublicChromeProps {
   navItems: NavItem[];
   siteName: string;
   siteTagline: string;
-  footerTeacher: FooterTeacher | null;
+  footerTeacher: FooterTeacher;
 }
 
 export default function PublicChrome({

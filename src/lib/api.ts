@@ -47,6 +47,36 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+// Uses the Next.js app's own API routes so reads/writes hit the same Prisma DB
+// that server components use — keeps admin writes and public reads in sync.
+async function requestLocal<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = getToken();
+  const res = await fetch(path, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...((options.headers ?? {}) as Record<string, string>),
+    },
+  });
+
+  if (!res.ok) {
+    let message = `HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { message?: string | string[] };
+      if (body.message) {
+        message = Array.isArray(body.message) ? body.message[0] : body.message;
+      }
+    } catch {
+      // ignore parse error
+    }
+    throw new Error(message);
+  }
+
+  if (res.status === 204) return undefined as T;
+  return res.json() as Promise<T>;
+}
+
 // ─── Auth ──────────────────────────────────────────────────────────────────────
 
 export const auth = {
@@ -82,11 +112,9 @@ function mapBanner(b: ApiBanner): Banner {
 export const publicBanners = {
   list: async (): Promise<ApiBanner[]> => {
     try {
-      console.log('fetch all banners')
       const res = await fetch(`${BASE}/banners-public`, {
         cache: "no-store",
       });
-      console.log('result : ', res)
       if (!res.ok) return [];
       return res.json() as Promise<ApiBanner[]>;
     } catch {
@@ -326,11 +354,11 @@ export const materials = {
 
 export const siteSettings = {
   list: (): Promise<Array<{ key: string; value: unknown }>> =>
-    request<Array<{ key: string; value: unknown }>>("/site-settings"),
+    requestLocal<Array<{ key: string; value: unknown }>>("/api/site-settings"),
   get: (key: string): Promise<{ key: string; value: unknown }> =>
-    request<{ key: string; value: unknown }>(`/site-settings/${key}`),
+    requestLocal<{ key: string; value: unknown }>(`/api/site-settings/${key}`),
   set: (key: string, value: unknown): Promise<{ key: string; value: unknown }> =>
-    request<{ key: string; value: unknown }>(`/site-settings/${key}`, {
+    requestLocal<{ key: string; value: unknown }>(`/api/site-settings/${key}`, {
       method: "PUT",
       body: JSON.stringify({ value }),
     }),
