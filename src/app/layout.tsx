@@ -79,7 +79,7 @@ async function getFooterTeacher(): Promise<FooterTeacher> {
     name: DEFAULT_ABOUT.teacherName,
     subject: DEFAULT_ABOUT.subject,
     phone: personalContact.phone[0],
-    email: personalContact.email,
+    email: personalContact.email || "info@tutiolms.lk",
     address: DEFAULT_ABOUT.address,
   };
 
