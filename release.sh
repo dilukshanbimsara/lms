@@ -95,7 +95,7 @@ if pm2 describe tutiolms-backend > /dev/null 2>&1; then
   pm2 restart tutiolms-backend
 else
   warn "tutiolms-backend process not found — starting fresh..."
-  pm2 start "$BACKEND_DIR/dist/main.js" --name tutiolms-backend --cwd "$BACKEND_DIR"
+  pm2 start "$BACKEND_DIR/dist/src/main.js" --name tutiolms-backend --cwd "$BACKEND_DIR"
 fi
 if pm2 describe tutiolms-frontend > /dev/null 2>&1; then
   pm2 restart tutiolms-frontend
