@@ -50,6 +50,7 @@ success "Directory confirmed: $PROJECT_DIR"
 
 # ── Step 2: GitHub සිට නවතම code pull කරන්න ─────────────────────────────────
 log "GitHub සිට නවතම code pull කරමින් (git pull)..."
+git reset --hard HEAD
 git pull origin main
 success "Code pulled successfully."
 
