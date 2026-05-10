@@ -1,4 +1,5 @@
-import { Download, FileText } from "lucide-react";
+import { Download } from "lucide-react";
+import { FileText } from "lucide-react";
 import { iconMap } from "@/lib/icons";
 import type { LearningDocument } from "@/types";
 
@@ -6,8 +7,15 @@ interface DocumentCardProps {
   doc: LearningDocument;
 }
 
+const BUTTON_LABELS: Record<string, string> = {
+  PDF: "Download PDF",
+  VIDEO: "Watch Video",
+  NOTE: "Read Notes",
+};
+
 export default function DocumentCard({ doc }: DocumentCardProps) {
   const IconComponent = iconMap[doc.icon ?? "FileText"] ?? FileText;
+  const buttonLabel = BUTTON_LABELS[doc.type ?? "PDF"] ?? "Download";
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col gap-4 hover:shadow-md hover:border-primary/30 transition-all duration-200 group">
@@ -41,16 +49,23 @@ export default function DocumentCard({ doc }: DocumentCardProps) {
         )}
       </div>
 
-      {/* Download button */}
-      <a
-        href={doc.downloadUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-auto flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg border-2 border-primary text-primary font-semibold text-sm hover:bg-primary hover:text-white transition-all duration-200"
-      >
-        <Download className="w-4 h-4" />
-        Download PDF
-      </a>
+      {/* Action button */}
+      {doc.downloadUrl ? (
+        <a
+          href={doc.downloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-auto flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg border-2 border-primary text-primary font-semibold text-sm hover:bg-primary hover:text-white transition-all duration-200"
+        >
+          <Download className="w-4 h-4" />
+          {buttonLabel}
+        </a>
+      ) : (
+        <span className="mt-auto flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 text-gray-400 font-semibold text-sm cursor-default select-none">
+          <Download className="w-4 h-4" />
+          Link coming soon
+        </span>
+      )}
     </div>
   );
 }

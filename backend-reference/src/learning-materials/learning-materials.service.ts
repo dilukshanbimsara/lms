@@ -9,7 +9,6 @@ export class LearningMaterialsService {
 
   findAllPublic() {
     return this.prisma.learningMaterial.findMany({
-      where: { fileUrl: { not: null } },
       select: {
         id: true,
         title: true,
@@ -17,6 +16,7 @@ export class LearningMaterialsService {
         subject: true,
         level: true,
         fileUrl: true,
+        content: true,
         createdAt: true,
       },
       orderBy: { createdAt: 'desc' },

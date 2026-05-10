@@ -47,9 +47,10 @@ export interface LearningDocument {
   title: string;
   subject: string;
   level: string;
+  type?: string;
   year?: string;
   fileSize?: string;
-  downloadUrl: string;
+  downloadUrl?: string;
   icon?: string;
 }
 

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000") + "/api";
+// Use internal URL so the auth check always hits NestJS via localhost,
+// not the public IP (which may be unreachable from inside the EC2 server).
+const API_BASE = (process.env.API_INTERNAL_URL ?? "http://localhost:4000") + "/api";
 
 async function isSuperAdmin(req: NextRequest): Promise<boolean> {
   const auth = req.headers.get("authorization");

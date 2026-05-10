@@ -24,8 +24,16 @@ interface PublicMaterial {
   type: string;
   subject: string;
   level: string;
-  fileUrl: string;
+  fileUrl: string | null;
+  content: string;
   createdAt: string;
+}
+
+function resolveUrl(m: PublicMaterial): string | undefined {
+  if (m.fileUrl) return m.fileUrl;
+  const c = m.content?.trim() ?? "";
+  if (c.startsWith("http://") || c.startsWith("https://")) return c;
+  return undefined;
 }
 
 async function getPublicMaterials(): Promise<LearningDocument[]> {
@@ -38,10 +46,11 @@ async function getPublicMaterials(): Promise<LearningDocument[]> {
     return materials.map((m) => ({
       id: m.id,
       title: m.title,
+      type: m.type,
       subject: m.subject,
       level: m.level,
       year: new Date(m.createdAt).getFullYear().toString(),
-      downloadUrl: m.fileUrl,
+      downloadUrl: resolveUrl(m),
       icon: iconByType[m.type] ?? "FileText",
     }));
   } catch {

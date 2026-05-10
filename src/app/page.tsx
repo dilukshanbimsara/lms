@@ -1,12 +1,31 @@
 import type { Metadata } from "next";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import AboutSection from "@/components/home/AboutSection";
-import { publicBanners } from "@/lib/api";
+import type { ApiBanner } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
 import type { AboutContent } from "@/types/admin";
 import { DEFAULT_ABOUT } from "@/types/admin";
 
 export const dynamic = "force-dynamic";
+
+async function getActiveBanners(): Promise<ApiBanner[]> {
+  try {
+    const rows = await prisma.banner.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: "asc" },
+    });
+    return rows.map((b) => ({
+      id: b.id,
+      title: b.title,
+      imageUrl: b.imageUrl,
+      isActive: b.isActive,
+      sortOrder: b.sortOrder,
+      createdAt: b.createdAt.toISOString(),
+    }));
+  } catch {
+    return [];
+  }
+}
 
 async function getAboutContent(): Promise<AboutContent> {
   try {
@@ -28,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const [activebanners, aboutContent] = await Promise.all([
-    publicBanners.list(),
+    getActiveBanners(),
     getAboutContent(),
   ]);
 
