@@ -88,10 +88,21 @@ cd "$PROJECT_DIR"
 npm run build
 success "Frontend build completed."
 
-# ── Step 9: PM2 processes restart කරන්න ──────────────────────────────────────
+# ── Step 9: PM2 processes restart කරන්න (නැත්නම් start කරන්න) ───────────────
 log "PM2 processes restart කරමින්..."
-pm2 restart tutiolms-backend
-pm2 restart tutiolms-frontend
+if pm2 describe tutiolms-backend > /dev/null 2>&1; then
+  pm2 restart tutiolms-backend
+else
+  warn "tutiolms-backend process not found — starting fresh..."
+  pm2 start "$BACKEND_DIR/dist/main.js" --name tutiolms-backend --cwd "$BACKEND_DIR"
+fi
+if pm2 describe tutiolms-frontend > /dev/null 2>&1; then
+  pm2 restart tutiolms-frontend
+else
+  warn "tutiolms-frontend process not found — starting fresh..."
+  pm2 start npm --name tutiolms-frontend --cwd "$PROJECT_DIR" -- start
+fi
+pm2 save
 success "PM2 processes restarted."
 
 # ── Step 10: Process status confirm කරන්න ────────────────────────────────────
