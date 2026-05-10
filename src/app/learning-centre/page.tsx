@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Download free past papers, model answers, and revision notes for O/L and A/L Mathematics and Physics.",
 };
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000") + "/api";
+const INTERNAL_API = (process.env.API_INTERNAL_URL ?? "http://localhost:4000") + "/api";
 
 const iconByType: Record<string, string> = {
   PDF: "FileText",
@@ -38,7 +38,7 @@ function resolveUrl(m: PublicMaterial): string | undefined {
 
 async function getPublicMaterials(): Promise<LearningDocument[]> {
   try {
-    const res = await fetch(`${BASE}/learning-materials-public`, {
+    const res = await fetch(`${INTERNAL_API}/learning-materials-public`, {
       cache: "no-store",
     });
     if (!res.ok) return [];

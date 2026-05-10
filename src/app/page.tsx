@@ -2,14 +2,11 @@ import type { Metadata } from "next";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import AboutSection from "@/components/home/AboutSection";
 import type { ApiBanner } from "@/lib/api";
-import { prisma } from "@/lib/prisma";
 import type { AboutContent } from "@/types/admin";
 import { DEFAULT_ABOUT } from "@/types/admin";
 
 export const dynamic = "force-dynamic";
 
-// Always use the internal (localhost) URL so server-side fetches reach
-// NestJS reliably regardless of how NEXT_PUBLIC_API_URL is configured.
 const INTERNAL_API = (process.env.API_INTERNAL_URL ?? "http://localhost:4000") + "/api";
 
 async function getActiveBanners(): Promise<ApiBanner[]> {
@@ -26,10 +23,15 @@ async function getActiveBanners(): Promise<ApiBanner[]> {
 
 async function getAboutContent(): Promise<AboutContent> {
   try {
-    const row = await prisma.siteSetting.findUnique({ where: { key: "aboutContent" } });
-    if (row?.value) return row.value as unknown as AboutContent;
+    const res = await fetch(`${INTERNAL_API}/site-settings-public/aboutContent`, {
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const row = (await res.json()) as { value: AboutContent } | null;
+      if (row?.value) return row.value;
+    }
   } catch {
-    // DB unavailable
+    // NestJS unavailable — fall back to defaults
   }
   return DEFAULT_ABOUT;
 }
