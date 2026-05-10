@@ -10,11 +10,11 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: {
-    default: "TutioLMS — Mr. Kamal Perera",
+    default: "TutioLMS",
     template: "%s | TutioLMS",
   },
   description:
-    "Professional O/L and A/L tuition classes in Mathematics and Physics by Mr. Kamal Perera. Hall, Group, Paper, Revision and Online classes available.",
+    "Professional O/L and A/L tuition classes. Hall, Group, Paper, Revision and Online classes available.",
   keywords: [
     "tuition",
     "mathematics",

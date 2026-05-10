@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { BookOpen } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import DocumentCard from "@/components/learning-centre/DocumentCard";
-import { prisma } from "@/lib/prisma";
 import type { LearningDocument } from "@/types";
 
 export const metadata: Metadata = {
@@ -11,33 +10,47 @@ export const metadata: Metadata = {
     "Download free past papers, model answers, and revision notes for O/L and A/L Mathematics and Physics.",
 };
 
+const BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000") + "/api";
+
 const iconByType: Record<string, string> = {
   PDF: "FileText",
   NOTE: "BookOpen",
   VIDEO: "Monitor",
 };
 
-export default async function LearningCentrePage() {
-  let documents: LearningDocument[] = [];
+interface PublicMaterial {
+  id: string;
+  title: string;
+  type: string;
+  subject: string;
+  level: string;
+  fileUrl: string;
+  createdAt: string;
+}
 
+async function getPublicMaterials(): Promise<LearningDocument[]> {
   try {
-    const materials = await prisma.learningMaterial.findMany({
-      where: { fileUrl: { not: null } },
-      orderBy: { createdAt: "desc" },
+    const res = await fetch(`${BASE}/learning-materials-public`, {
+      cache: "no-store",
     });
-
-    documents = materials.map((m) => ({
+    if (!res.ok) return [];
+    const materials = (await res.json()) as PublicMaterial[];
+    return materials.map((m) => ({
       id: m.id,
       title: m.title,
       subject: m.subject,
       level: m.level,
-      year: String(m.createdAt.getFullYear()),
-      downloadUrl: m.fileUrl!,
+      year: new Date(m.createdAt).getFullYear().toString(),
+      downloadUrl: m.fileUrl,
       icon: iconByType[m.type] ?? "FileText",
     }));
   } catch {
-    // Database unavailable — page renders with empty state
+    return [];
   }
+}
+
+export default async function LearningCentrePage() {
+  const documents = await getPublicMaterials();
 
   const aLevelDocs = documents.filter((d) => d.level === "A/L");
   const oLevelDocs = documents.filter((d) => d.level === "O/L");

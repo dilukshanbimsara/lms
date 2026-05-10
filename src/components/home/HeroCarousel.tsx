@@ -1,24 +1,19 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { slides } from "@/data/slides";
 import type { ApiBanner } from "@/lib/api";
-import type { HeroBackground } from "@/types/admin";
 
 interface Props {
   banners?: ApiBanner[];
-  heroBackground?: HeroBackground;
 }
 
-export default function HeroCarousel({ banners = [], heroBackground }: Props) {
+export default function HeroCarousel({ banners = [] }: Props) {
   const [current, setCurrent] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const useBanners = banners.length > 0;
-  const count = useBanners ? banners.length : slides.length;
+  const count = banners.length;
 
   const next = useCallback(() => {
     setCurrent((prev) => (prev + 1) % count);
@@ -38,18 +33,12 @@ export default function HeroCarousel({ banners = [], heroBackground }: Props) {
   }, []);
 
   useEffect(() => {
+    if (count === 0) return;
     startAuto();
     return stopAuto;
-  }, [startAuto, stopAuto]);
+  }, [startAuto, stopAuto, count]);
 
-  // Determine the background for color slides:
-  // - banners always use their own images
-  // - when heroBackground.type === "image" and imageUrl is set, use that image
-  // - otherwise fall back to each slide's backgroundColor
-  const useCustomBgImage =
-    !useBanners &&
-    heroBackground?.type === "image" &&
-    !!heroBackground.imageUrl;
+  if (count === 0) return null;
 
   return (
     <section
@@ -63,118 +52,66 @@ export default function HeroCarousel({ banners = [], heroBackground }: Props) {
         className="flex h-full will-change-transform transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
-        {useBanners
-          ? banners.map((banner, i) => (
-              <div
-                key={banner.id}
-                className="relative flex-shrink-0 w-full h-full"
-                aria-hidden={i !== current}
-              >
-                <Image
-                  src={banner.imageUrl}
-                  alt={banner.title}
-                  fill
-                  className="object-cover"
-                  priority={i === 0}
-                />
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="relative z-10 h-full flex items-center justify-center text-center px-6">
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight max-w-3xl">
-                    {banner.title}
-                  </h1>
-                </div>
-              </div>
-            ))
-          : slides.map((slide, i) => (
-              <div
-                key={slide.id}
-                className="relative flex-shrink-0 w-full h-full flex items-center justify-center"
-                style={useCustomBgImage ? undefined : { backgroundColor: slide.backgroundColor }}
-                aria-hidden={i !== current}
-              >
-                {/* Custom background image */}
-                {useCustomBgImage && (
-                  <>
-                    <Image
-                      src={heroBackground!.imageUrl!}
-                      alt="Hero background"
-                      fill
-                      className="object-cover"
-                      priority={i === 0}
-                    />
-                    <div className="absolute inset-0 bg-black/50" />
-                  </>
-                )}
-
-                {/* Decorative dot pattern for gradient mode */}
-                {!useCustomBgImage && (
-                  <div
-                    className="absolute inset-0 opacity-10"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle at 20% 80%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)",
-                      backgroundSize: "60px 60px",
-                    }}
-                  />
-                )}
-
-                {/* Content */}
-                <div className="relative z-10 text-center text-white px-6 max-w-3xl mx-auto">
-                  <p className="text-accent font-semibold text-sm uppercase tracking-widest mb-3">
-                    Expert Tuition Classes
-                  </p>
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-5 leading-tight">
-                    {slide.heading}
-                  </h1>
-                  <p className="text-base md:text-lg text-white/85 mb-8 leading-relaxed max-w-xl mx-auto">
-                    {slide.subheading}
-                  </p>
-                  {slide.ctaLabel && slide.ctaHref && (
-                    <Link
-                      href={slide.ctaHref}
-                      className="inline-flex items-center gap-2 bg-accent text-white px-7 py-3 rounded-lg font-semibold text-sm hover:bg-amber-500 transition-colors shadow-lg"
-                    >
-                      {slide.ctaLabel}
-                    </Link>
-                  )}
-                </div>
-              </div>
-            ))}
-      </div>
-
-      {/* Prev arrow */}
-      <button
-        onClick={() => { prev(); startAuto(); }}
-        className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 bg-black/25 hover:bg-black/45 text-white rounded-full p-2 transition-colors"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-      </button>
-
-      {/* Next arrow */}
-      <button
-        onClick={() => { next(); startAuto(); }}
-        className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 bg-black/25 hover:bg-black/45 text-white rounded-full p-2 transition-colors"
-        aria-label="Next slide"
-      >
-        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-      </button>
-
-      {/* Dots */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
-        {Array.from({ length: count }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => { setCurrent(i); startAuto(); }}
-            className={`rounded-full transition-all duration-300 ${
-              i === current
-                ? "bg-white w-6 h-2.5"
-                : "bg-white/50 hover:bg-white/75 w-2.5 h-2.5"
-            }`}
-            aria-label={`Go to slide ${i + 1}`}
-          />
+        {banners.map((banner, i) => (
+          <div
+            key={banner.id}
+            className="relative flex-shrink-0 w-full h-full"
+            aria-hidden={i !== current}
+          >
+            <Image
+              src={banner.imageUrl}
+              alt={banner.title}
+              fill
+              className="object-cover"
+              priority={i === 0}
+            />
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="relative z-10 h-full flex items-center justify-center text-center px-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight max-w-3xl">
+                {banner.title}
+              </h1>
+            </div>
+          </div>
         ))}
       </div>
+
+      {count > 1 && (
+        <>
+          {/* Prev arrow */}
+          <button
+            onClick={() => { prev(); startAuto(); }}
+            className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 bg-black/25 hover:bg-black/45 text-white rounded-full p-2 transition-colors"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {/* Next arrow */}
+          <button
+            onClick={() => { next(); startAuto(); }}
+            className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 bg-black/25 hover:bg-black/45 text-white rounded-full p-2 transition-colors"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {/* Dots */}
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+            {Array.from({ length: count }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => { setCurrent(i); startAuto(); }}
+                className={`rounded-full transition-all duration-300 ${
+                  i === current
+                    ? "bg-white w-6 h-2.5"
+                    : "bg-white/50 hover:bg-white/75 w-2.5 h-2.5"
+                }`}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }

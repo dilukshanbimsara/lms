@@ -7,6 +7,22 @@ import { UpdateMaterialDto } from './dto/update-material.dto';
 export class LearningMaterialsService {
   constructor(private prisma: PrismaService) {}
 
+  findAllPublic() {
+    return this.prisma.learningMaterial.findMany({
+      where: { fileUrl: { not: null } },
+      select: {
+        id: true,
+        title: true,
+        type: true,
+        subject: true,
+        level: true,
+        fileUrl: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
   findAll() {
     return this.prisma.learningMaterial.findMany({
       include: { uploader: { select: { id: true, name: true, email: true } } },
