@@ -8,20 +8,17 @@ import { DEFAULT_ABOUT } from "@/types/admin";
 
 export const dynamic = "force-dynamic";
 
+// Always use the internal (localhost) URL so server-side fetches reach
+// NestJS reliably regardless of how NEXT_PUBLIC_API_URL is configured.
+const INTERNAL_API = (process.env.API_INTERNAL_URL ?? "http://localhost:4000") + "/api";
+
 async function getActiveBanners(): Promise<ApiBanner[]> {
   try {
-    const rows = await prisma.banner.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
+    const res = await fetch(`${INTERNAL_API}/banners-public`, {
+      cache: "no-store",
     });
-    return rows.map((b) => ({
-      id: b.id,
-      title: b.title,
-      imageUrl: b.imageUrl,
-      isActive: b.isActive,
-      sortOrder: b.sortOrder,
-      createdAt: b.createdAt.toISOString(),
-    }));
+    if (!res.ok) return [];
+    return res.json() as Promise<ApiBanner[]>;
   } catch {
     return [];
   }

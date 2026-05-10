@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SectionHeading from "@/components/ui/SectionHeading";
 import InstitutionCard from "@/components/institutions/InstitutionCard";
-import { prisma } from "@/lib/prisma";
 import type { Institution } from "@/types";
 
 export const metadata: Metadata = {
@@ -10,16 +9,33 @@ export const metadata: Metadata = {
     "Find tuition class schedules and contact details for all institutions where classes are held — Colombo, Kandy, and Gampaha.",
 };
 
-export default async function InstitutionsPage() {
-  let institutions: Institution[] = [];
+const INTERNAL_API = (process.env.API_INTERNAL_URL ?? "http://localhost:4000") + "/api";
 
+interface ApiTimetableRow {
+  id: string;
+  day: string;
+  time: string;
+  subject: string;
+  level: string;
+}
+
+interface ApiInstitution {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  mapUrl?: string | null;
+  timetable: ApiTimetableRow[];
+}
+
+async function getInstitutions(): Promise<Institution[]> {
   try {
-    const rows = await prisma.institution.findMany({
-      include: { timetable: { orderBy: { id: "asc" } } },
-      orderBy: { name: "asc" },
+    const res = await fetch(`${INTERNAL_API}/institutions-public`, {
+      cache: "no-store",
     });
-
-    institutions = rows.map((inst) => ({
+    if (!res.ok) return [];
+    const rows = (await res.json()) as ApiInstitution[];
+    return rows.map((inst) => ({
       id: inst.id,
       name: inst.name,
       address: inst.address,
@@ -33,8 +49,12 @@ export default async function InstitutionsPage() {
       })),
     }));
   } catch {
-    // Database unavailable — page renders with empty state
+    return [];
   }
+}
+
+export default async function InstitutionsPage() {
+  const institutions = await getInstitutions();
 
   return (
     <div className="py-16 bg-gray-50 min-h-screen">
