@@ -16,29 +16,71 @@ const ICON_OPTIONS = [
   "FileText", "Award", "Star", "Clock",
 ];
 
-const emptyItem = (): AdminClassItem & { _key: string } => ({
+const CATEGORY_LABEL_OPTIONS = [
+  "Theory Class",
+  "Group Class",
+  "Paper Class",
+  "Revision Class",
+  "Online Class",
+  "Seminar",
+  "Other",
+];
+
+const WEEKDAYS = [
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+];
+
+const TIME_OPTIONS: string[] = (() => {
+  const times: string[] = [];
+  for (let h = 6; h <= 21; h++) {
+    for (const m of [0, 30]) {
+      const hour12 = h % 12 === 0 ? 12 : h % 12;
+      const ampm = h < 12 ? "AM" : "PM";
+      const label = `${hour12}:${m === 0 ? "00" : "30"} ${ampm}`;
+      times.push(label);
+    }
+  }
+  return times;
+})();
+
+const emptyItem = (): AdminClassItem & { _key: string; timeStart: string; timeEnd: string } => ({
   _key: `item-${Date.now()}-${Math.random()}`,
   id: "",
   subject: "",
   level: "A/L",
   day: "",
   time: "",
+  timeStart: "",
+  timeEnd: "",
   fee: "",
   venue: "",
   seats: undefined,
   notes: "",
 });
 
+function buildTimeString(start: string, end: string) {
+  if (!start && !end) return "";
+  if (start && end) return `${start} – ${end}`;
+  return start || end;
+}
+
 export default function ClassCategoryForm({ initialData, onSave, onCancel }: ClassCategoryFormProps) {
-  const [label, setLabel] = useState(initialData?.label ?? "");
+  const initLabel = initialData?.label ?? "";
+  const isPredefined = CATEGORY_LABEL_OPTIONS.includes(initLabel);
+  const [labelSelect, setLabelSelect] = useState(isPredefined ? initLabel : (initLabel ? "Other" : ""));
+  const [labelCustom, setLabelCustom] = useState(isPredefined ? "" : initLabel);
   const [icon, setIcon] = useState(initialData?.icon ?? "BookOpen");
   const [description, setDescription] = useState(initialData?.description ?? "");
   const [sortOrder, setSortOrder] = useState(initialData?.sortOrder ?? 0);
-  const [items, setItems] = useState<(AdminClassItem & { _key: string })[]>(
-    initialData?.items.map((it) => ({ ...it, _key: it.id || `item-${Math.random()}` })) ??
-      [emptyItem()]
+  const [items, setItems] = useState<(AdminClassItem & { _key: string; timeStart: string; timeEnd: string })[]>(
+    initialData?.items.map((it) => {
+      const parts = it.time ? it.time.split(" – ") : ["", ""];
+      return { ...it, _key: it.id || `item-${Math.random()}`, timeStart: parts[0] ?? "", timeEnd: parts[1] ?? "" };
+    }) ?? [emptyItem()]
   );
   const [institutionNames, setInstitutionNames] = useState<string[]>([]);
+
+  const label = labelSelect === "Other" ? labelCustom : labelSelect;
 
   useEffect(() => {
     api.institutions.list().then((list) => setInstitutionNames(list.map((i) => i.name))).catch(() => {});
@@ -46,8 +88,21 @@ export default function ClassCategoryForm({ initialData, onSave, onCancel }: Cla
 
   const addItem = () => setItems((prev) => [...prev, emptyItem()]);
   const removeItem = (key: string) => setItems((prev) => prev.filter((it) => it._key !== key));
-  const updateItem = (key: string, field: keyof AdminClassItem, value: string | number | undefined) => {
-    setItems((prev) => prev.map((it) => (it._key === key ? { ...it, [field]: value } : it)));
+  const updateItem = (key: string, field: keyof AdminClassItem | "timeStart" | "timeEnd", value: string | number | undefined) => {
+    setItems((prev) =>
+      prev.map((it) => {
+        if (it._key !== key) return it;
+        if (field === "timeStart") {
+          const updated = { ...it, timeStart: value as string };
+          return { ...updated, time: buildTimeString(updated.timeStart, updated.timeEnd) };
+        }
+        if (field === "timeEnd") {
+          const updated = { ...it, timeEnd: value as string };
+          return { ...updated, time: buildTimeString(updated.timeStart, updated.timeEnd) };
+        }
+        return { ...it, [field]: value };
+      })
+    );
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -57,7 +112,7 @@ export default function ClassCategoryForm({ initialData, onSave, onCancel }: Cla
       icon,
       description,
       sortOrder,
-      items: items.map(({ _key: _k, id: _id, ...rest }) => rest),
+      items: items.map(({ _key: _k, timeStart: _ts, timeEnd: _te, ...rest }) => rest),
     });
   };
 
@@ -70,14 +125,27 @@ export default function ClassCategoryForm({ initialData, onSave, onCancel }: Cla
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={labelCls}>Category Label</label>
-          <input
-            type="text"
-            value={label}
-            onChange={(e) => setLabel(e.target.value)}
-            required
+          <select
+            value={labelSelect}
+            onChange={(e) => { setLabelSelect(e.target.value); if (e.target.value !== "Other") setLabelCustom(""); }}
+            required={labelSelect !== "Other"}
             className={inputCls}
-            placeholder="e.g. Hall Classes"
-          />
+          >
+            <option value="" disabled>Select a category…</option>
+            {CATEGORY_LABEL_OPTIONS.map((opt) => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+          {labelSelect === "Other" && (
+            <input
+              type="text"
+              value={labelCustom}
+              onChange={(e) => setLabelCustom(e.target.value)}
+              required
+              className={inputCls + " mt-2"}
+              placeholder="Enter custom label…"
+            />
+          )}
         </div>
         <div>
           <label className={labelCls}>Icon</label>
@@ -170,22 +238,41 @@ export default function ClassCategoryForm({ initialData, onSave, onCancel }: Cla
                     </select>
                   </td>
                   <td className="px-1 py-1.5">
-                    <input
-                      type="text"
+                    <select
                       value={item.day}
                       onChange={(e) => updateItem(item._key, "day", e.target.value)}
-                      placeholder="Saturday"
                       className={cellInput}
-                    />
+                    >
+                      <option value="">— Day —</option>
+                      {WEEKDAYS.map((d) => (
+                        <option key={d} value={d}>{d}</option>
+                      ))}
+                    </select>
                   </td>
                   <td className="px-1 py-1.5">
-                    <input
-                      type="text"
-                      value={item.time}
-                      onChange={(e) => updateItem(item._key, "time", e.target.value)}
-                      placeholder="8:00 AM – 10:00 AM"
-                      className={cellInput}
-                    />
+                    <div className="flex items-center gap-1">
+                      <select
+                        value={item.timeStart}
+                        onChange={(e) => updateItem(item._key, "timeStart", e.target.value)}
+                        className={cellInput}
+                      >
+                        <option value="">Start</option>
+                        {TIME_OPTIONS.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                      <span className="text-gray-400 text-xs shrink-0">–</span>
+                      <select
+                        value={item.timeEnd}
+                        onChange={(e) => updateItem(item._key, "timeEnd", e.target.value)}
+                        className={cellInput}
+                      >
+                        <option value="">End</option>
+                        {TIME_OPTIONS.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
                   </td>
                   <td className="px-1 py-1.5">
                     <input
