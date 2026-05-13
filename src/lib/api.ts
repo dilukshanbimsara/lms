@@ -450,7 +450,7 @@ export const siteSettings = {
   get: (key: string): Promise<{ key: string; value: unknown }> =>
     requestLocal<{ key: string; value: unknown }>(`/api/site-settings/${key}`),
   set: (key: string, value: unknown): Promise<{ key: string; value: unknown }> =>
-    request<{ key: string; value: unknown }>(`/site-settings/${key}`, {
+    requestLocal<{ key: string; value: unknown }>(`/api/site-settings/${key}`, {
       method: "PUT",
       body: JSON.stringify({ value }),
     }),
