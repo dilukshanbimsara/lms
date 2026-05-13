@@ -1,4 +1,4 @@
-import type { AdminUser, Banner, AdminInstitution, Teacher, LearningMaterial } from "@/types/admin";
+import type { AdminUser, Banner, AdminInstitution, Teacher, LearningMaterial, AdminClassCategory, AdminClassItem } from "@/types/admin";
 
 const BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000") + "/api";
 
@@ -348,6 +348,98 @@ export const materials = {
   },
   delete: (id: string): Promise<void> =>
     request<void>(`/learning-materials/${id}`, { method: "DELETE" }),
+};
+
+// ─── Classes ──────────────────────────────────────────────────────────────────
+
+interface ApiClassItem {
+  id: string;
+  subject: string;
+  level: string;
+  day: string;
+  time: string;
+  fee: string;
+  venue?: string;
+  seats?: number;
+  notes?: string;
+  sortOrder: number;
+  categoryId: string;
+}
+
+interface ApiClassCategory {
+  id: string;
+  label: string;
+  icon: string;
+  description: string;
+  sortOrder: number;
+  items: ApiClassItem[];
+}
+
+function mapClassItem(i: ApiClassItem): AdminClassItem {
+  return {
+    id: i.id,
+    subject: i.subject,
+    level: i.level,
+    day: i.day,
+    time: i.time,
+    fee: i.fee,
+    venue: i.venue,
+    seats: i.seats,
+    notes: i.notes,
+  };
+}
+
+function mapClassCategory(c: ApiClassCategory): AdminClassCategory {
+  return {
+    id: c.id,
+    label: c.label,
+    icon: c.icon,
+    description: c.description,
+    sortOrder: c.sortOrder,
+    items: c.items.map(mapClassItem),
+  };
+}
+
+function toClassCategoryPayload(data: Omit<AdminClassCategory, "id">) {
+  return {
+    label: data.label,
+    icon: data.icon,
+    description: data.description,
+    sortOrder: data.sortOrder,
+    items: data.items.map(({ subject, level, day, time, fee, venue, seats, notes }) => ({
+      subject,
+      level,
+      day,
+      time,
+      fee,
+      ...(venue ? { venue } : {}),
+      ...(seats !== undefined ? { seats } : {}),
+      ...(notes ? { notes } : {}),
+    })),
+  };
+}
+
+export const classes = {
+  list: async (): Promise<AdminClassCategory[]> => {
+    const res = await request<ApiClassCategory[]>("/classes");
+    return res.map(mapClassCategory);
+  },
+  create: async (data: Omit<AdminClassCategory, "id">): Promise<AdminClassCategory> => {
+    const res = await request<ApiClassCategory>("/classes", {
+      method: "POST",
+      body: JSON.stringify(toClassCategoryPayload(data)),
+    });
+    return mapClassCategory(res);
+  },
+  update: async (id: string, data: Omit<AdminClassCategory, "id">): Promise<AdminClassCategory> => {
+    const res = await request<ApiClassCategory>(`/classes/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(toClassCategoryPayload(data)),
+    });
+    return mapClassCategory(res);
+  },
+  delete: (id: string): Promise<void> =>
+    request<void>(`/classes/${id}`, { method: "DELETE" }),
 };
 
 // ─── Site Settings ─────────────────────────────────────────────────────────────

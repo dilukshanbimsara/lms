@@ -1,11 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { classCategories } from "@/data/classes";
+import { classCategories as staticCategories } from "@/data/classes";
 import AccordionItem from "./AccordionItem";
+import type { ClassCategory } from "@/types";
 
-export default function AccordionList() {
-  const [openId, setOpenId] = useState<string | null>("hall");
+interface AccordionListProps {
+  categories?: ClassCategory[];
+}
+
+export default function AccordionList({ categories }: AccordionListProps) {
+  const data = categories && categories.length > 0 ? categories : staticCategories;
+  const [openId, setOpenId] = useState<string | null>(data[0]?.id ?? null);
 
   const handleToggle = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
@@ -13,7 +19,7 @@ export default function AccordionList() {
 
   return (
     <div className="space-y-3">
-      {classCategories.map((category) => (
+      {data.map((category) => (
         <AccordionItem
           key={category.id}
           category={category}

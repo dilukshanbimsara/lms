@@ -68,6 +68,27 @@ export interface LearningMaterial {
   createdAt: string;
 }
 
+export interface AdminClassItem {
+  id: string;
+  subject: string;
+  level: string;
+  day: string;
+  time: string;
+  fee: string;
+  venue?: string;
+  seats?: number;
+  notes?: string;
+}
+
+export interface AdminClassCategory {
+  id: string;
+  label: string;
+  icon: string;
+  description: string;
+  sortOrder: number;
+  items: AdminClassItem[];
+}
+
 export interface NavToggle {
   href: string;
   label: string;

@@ -4,6 +4,16 @@ import { UpdateMaterialDto } from './dto/update-material.dto';
 export declare class LearningMaterialsService {
     private prisma;
     constructor(prisma: PrismaService);
+    findAllPublic(): import(".prisma/client").Prisma.PrismaPromise<{
+        id: string;
+        createdAt: Date;
+        title: string;
+        subject: string;
+        level: string;
+        type: import(".prisma/client").$Enums.MaterialType;
+        content: string;
+        fileUrl: string;
+    }[]>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<({
         uploader: {
             id: string;

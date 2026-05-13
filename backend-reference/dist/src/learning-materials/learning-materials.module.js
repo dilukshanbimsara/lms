@@ -10,12 +10,13 @@ exports.LearningMaterialsModule = void 0;
 const common_1 = require("@nestjs/common");
 const learning_materials_service_1 = require("./learning-materials.service");
 const learning_materials_controller_1 = require("./learning-materials.controller");
+const learning_materials_public_controller_1 = require("./learning-materials-public.controller");
 let LearningMaterialsModule = class LearningMaterialsModule {
 };
 exports.LearningMaterialsModule = LearningMaterialsModule;
 exports.LearningMaterialsModule = LearningMaterialsModule = __decorate([
     (0, common_1.Module)({
-        controllers: [learning_materials_controller_1.LearningMaterialsController],
+        controllers: [learning_materials_controller_1.LearningMaterialsController, learning_materials_public_controller_1.LearningMaterialsPublicController],
         providers: [learning_materials_service_1.LearningMaterialsService],
     })
 ], LearningMaterialsModule);

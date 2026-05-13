@@ -16,6 +16,21 @@ let LearningMaterialsService = class LearningMaterialsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    findAllPublic() {
+        return this.prisma.learningMaterial.findMany({
+            select: {
+                id: true,
+                title: true,
+                type: true,
+                subject: true,
+                level: true,
+                fileUrl: true,
+                content: true,
+                createdAt: true,
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
     findAll() {
         return this.prisma.learningMaterial.findMany({
             include: { uploader: { select: { id: true, name: true, email: true } } },

@@ -7,6 +7,7 @@ import { InstitutionsModule } from './institutions/institutions.module';
 import { LearningMaterialsModule } from './learning-materials/learning-materials.module';
 import { SiteSettingsModule } from './site-settings/site-settings.module';
 import { UsersModule } from './users/users.module';
+import { ClassesModule } from './classes/classes.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     InstitutionsModule,
     LearningMaterialsModule,
     SiteSettingsModule,
+    ClassesModule,
   ],
 })
 export class AppModule {}

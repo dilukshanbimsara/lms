@@ -77,19 +77,25 @@ log "Database migrations apply කරමින් (prisma migrate deploy)..."
 npx prisma migrate deploy
 success "Database migrations applied."
 
-# ── Step 7: Backend build කරන්න (NestJS) ─────────────────────────────────────
+# ── Step 7: Backend Prisma client generate කරන්න ─────────────────────────────
+log "Backend Prisma client generate කරමින්..."
+cd "$BACKEND_DIR"
+npx prisma generate
+success "Backend Prisma client generated."
+
+# ── Step 8 (old 7): Backend build කරන්න (NestJS) ─────────────────────────────
 log "Backend build කරමින් (NestJS — npm run build)..."
 cd "$BACKEND_DIR"
 npm run build
 success "Backend build completed."
 
-# ── Step 8: Frontend build කරන්න (Next.js) ────────────────────────────────────
+# ── Step 9: Frontend build කරන්න (Next.js) ────────────────────────────────────
 log "Frontend build කරමින් (Next.js — npm run build)..."
 cd "$PROJECT_DIR"
 npm run build
 success "Frontend build completed."
 
-# ── Step 9: PM2 processes restart කරන්න (නැත්නම් start කරන්න) ───────────────
+# ── Step 10: PM2 processes restart කරන්න (නැත්නම් start කරන්න) ──────────────
 log "PM2 processes restart කරමින්..."
 if pm2 describe tutiolms-backend > /dev/null 2>&1; then
   pm2 restart tutiolms-backend
@@ -106,7 +112,7 @@ fi
 pm2 save
 success "PM2 processes restarted."
 
-# ── Step 10: Process status confirm කරන්න ────────────────────────────────────
+# ── Step 11: Process status confirm කරන්න ────────────────────────────────────
 log "Process status confirm කරමින්..."
 pm2 list
 

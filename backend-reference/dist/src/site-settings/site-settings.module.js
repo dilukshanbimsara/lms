@@ -10,12 +10,13 @@ exports.SiteSettingsModule = void 0;
 const common_1 = require("@nestjs/common");
 const site_settings_service_1 = require("./site-settings.service");
 const site_settings_controller_1 = require("./site-settings.controller");
+const site_settings_public_controller_1 = require("./site-settings-public.controller");
 let SiteSettingsModule = class SiteSettingsModule {
 };
 exports.SiteSettingsModule = SiteSettingsModule;
 exports.SiteSettingsModule = SiteSettingsModule = __decorate([
     (0, common_1.Module)({
-        controllers: [site_settings_controller_1.SiteSettingsController],
+        controllers: [site_settings_controller_1.SiteSettingsController, site_settings_public_controller_1.SiteSettingsPublicController],
         providers: [site_settings_service_1.SiteSettingsService],
     })
 ], SiteSettingsModule);

@@ -16,6 +16,7 @@ const institutions_module_1 = require("./institutions/institutions.module");
 const learning_materials_module_1 = require("./learning-materials/learning-materials.module");
 const site_settings_module_1 = require("./site-settings/site-settings.module");
 const users_module_1 = require("./users/users.module");
+const classes_module_1 = require("./classes/classes.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -30,6 +31,7 @@ exports.AppModule = AppModule = __decorate([
             institutions_module_1.InstitutionsModule,
             learning_materials_module_1.LearningMaterialsModule,
             site_settings_module_1.SiteSettingsModule,
+            classes_module_1.ClassesModule,
         ],
     })
 ], AppModule);

@@ -13,6 +13,7 @@ import {
   LogOut,
   Info,
   User,
+  CalendarDays,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -20,6 +21,7 @@ const SUPER_ADMIN_NAV = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Banners", href: "/admin/banners", icon: Image },
   { label: "Institutions", href: "/admin/institutions", icon: Building2 },
+  { label: "Classes", href: "/admin/classes", icon: CalendarDays },
   { label: "About", href: "/admin/about", icon: Info },
   { label: "Theme", href: "/admin/theme", icon: Palette },
   { label: "Teacher", href: "/admin/teachers", icon: User },
@@ -28,6 +30,7 @@ const SUPER_ADMIN_NAV = [
 
 const TEACHER_NAV = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "Classes", href: "/admin/classes", icon: CalendarDays },
   { label: "Learning Centre", href: "/admin/learning-centre", icon: BookOpen },
   { label: "Profile", href: "/admin/profile", icon: UserCircle },
 ];
