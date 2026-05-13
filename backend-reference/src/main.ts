@@ -31,6 +31,8 @@ async function bootstrap() {
 
   const port = process.env.PORT ?? 4000;
   await app.listen(port);
+  console.log('PORT : ', process.env.PORT);
+  console.log('FRONTEND_URL : ', process.env.FRONTEND_URL);
   console.log(`TutioLMS API running at http://localhost:${port}/api`);
 }
 
