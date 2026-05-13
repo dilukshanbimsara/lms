@@ -8,23 +8,29 @@ import type { NavToggle, HslColor, FooterTeacher, SiteConfig, AboutContent } fro
 import { DEFAULT_SITE_CONFIG, DEFAULT_ABOUT } from "@/types/admin";
 import { prisma } from "@/lib/prisma";
 
-export const metadata: Metadata = {
-  title: {
-    default: "TutioLMS",
-    template: "%s | TutioLMS",
-  },
-  description:
-    "Professional O/L and A/L tuition classes. Hall, Group, Paper, Revision and Online classes available.",
-  keywords: [
-    "tuition",
-    "mathematics",
-    "physics",
-    "O/L",
-    "A/L",
-    "Sri Lanka",
-    "online classes",
-  ],
-};
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSiteConfig();
+  const name = config.siteName || "TutioLMS";
+  return {
+    title: {
+      default: name,
+      template: `%s | ${name}`,
+    },
+    description:
+      "Professional O/L and A/L tuition classes. Hall, Group, Paper, Revision and Online classes available.",
+    keywords: [
+      "tuition",
+      "mathematics",
+      "physics",
+      "O/L",
+      "A/L",
+      "Sri Lanka",
+      "online classes",
+    ],
+  };
+}
 
 // ─── Default theme colours ─────────────────────────────────────────────────────
 const DEFAULT_PRIMARY: HslColor = { h: 215, s: 70, l: 25 };
