@@ -72,7 +72,16 @@ export default function ThemeEditor() {
         setSelectedPresetId(matchPresetId(primary, accent) ?? COLOR_PRESETS[0].id);
 
         if (map.heroBackground) setHeroBg(map.heroBackground as HeroBackground);
-        if (map.navItems) setNavItems(map.navItems as NavToggle[]);
+        if (map.navItems) {
+          const dbItems = map.navItems as Array<{ href: string; visible: boolean }>;
+          const visibilityMap = Object.fromEntries(dbItems.map((d) => [d.href, d.visible]));
+          setNavItems(
+            defaultSettings.navItems.map((item) => ({
+              ...item,
+              visible: visibilityMap[item.href] ?? item.visible,
+            }))
+          );
+        }
       })
       .catch(() => {
         const stored = localStorage.getItem("admin_settings");

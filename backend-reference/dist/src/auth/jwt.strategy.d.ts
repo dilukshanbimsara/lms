@@ -4,7 +4,8 @@ import { Role } from './roles.enum';
 interface JwtPayload {
     sub: string;
     email: string;
-    role: Role;
+    role: Role | 'STUDENT';
+    type?: 'admin' | 'student';
 }
 declare const JwtStrategy_base: new (...args: any[]) => Strategy;
 export declare class JwtStrategy extends JwtStrategy_base {
@@ -12,7 +13,8 @@ export declare class JwtStrategy extends JwtStrategy_base {
     validate(payload: JwtPayload): Promise<{
         id: string;
         email: string;
-        role: Role;
+        role: "STUDENT" | Role;
+        type: "student" | "admin";
     }>;
 }
 export {};

@@ -12,4 +12,14 @@ export declare class AuthController {
             role: import(".prisma/client").$Enums.Role;
         };
     }>;
+    studentLogin(dto: LoginDto): Promise<{
+        access_token: string;
+        student: {
+            id: string;
+            name: string;
+            email: string;
+            studentNumber: string;
+            status: "ACTIVE";
+        };
+    }>;
 }

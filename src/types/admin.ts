@@ -71,6 +71,7 @@ export interface LearningMaterial {
 export interface AdminClassItem {
   id: string;
   subject: string;
+  subjectCode?: string;
   level: string;
   day: string;
   time: string;
@@ -221,4 +222,140 @@ export interface FooterTeacher {
   phone: string;
   email: string;
   address: string;
+}
+
+// ─── Student ───────────────────────────────────────────────────────────────────
+
+export type StudentStatus = "PENDING" | "ACTIVE" | "DISABLED" | "REJECTED";
+
+export interface Student {
+  id: string;
+  email: string;
+  name: string;
+  phone: string;
+  address: string;
+  examYear: string;
+  examLevel: string;
+  subject: string;
+  subjectCode: string;
+  institutionId: string | null;
+  institution?: { id: string; name: string } | null;
+  studentNumber: string;
+  status: StudentStatus;
+  profileImageUrl: string | null;
+  classItemId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaginatedStudents {
+  data: Student[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
+export interface StudentUser {
+  id: string;
+  name: string;
+  email: string;
+  studentNumber: string;
+  status: StudentStatus;
+}
+
+export interface StudentRegisterData {
+  email: string;
+  name: string;
+  phone: string;
+  address: string;
+  examYear: string;
+  examLevel: string;
+  subject: string;
+  subjectCode: string;
+  institutionId?: string;
+  classItemId?: string;
+  password: string;
+}
+
+// ─── Results ──────────────────────────────────────────────────────────────────
+
+export interface GradeRange { min: number; max: number; }
+
+export interface ResultSheetGradeRanges {
+  A: GradeRange;
+  B: GradeRange;
+  C: GradeRange;
+  S: GradeRange;
+  W: GradeRange;
+}
+
+export interface StudentResultEntry {
+  id?: string;
+  studentId: string;
+  studentNumber: string;
+  studentName: string;
+  subject: string;
+  mark: number | null | "";
+  grade: string;
+  note: string;
+}
+
+export interface ResultSheet {
+  id: string;
+  title: string;
+  year: string;
+  examDate: string;
+  description?: string;
+  gradeRanges: ResultSheetGradeRanges;
+  institutionIds: string[];
+  results: StudentResultEntry[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ResultSheetSummary {
+  id: string;
+  title: string;
+  year: string;
+  examDate: string;
+  description?: string;
+  gradeRanges: ResultSheetGradeRanges;
+  institutionIds: string[];
+  studentCount: number;
+  institutionCount: number;
+  createdAt: string;
+}
+
+export interface StudentMyResult {
+  sheetId: string;
+  title: string;
+  year: string;
+  examDate: string;
+  description?: string;
+  gradeRanges: ResultSheetGradeRanges;
+  mark: number | null;
+  grade: string | null;
+  note: string;
+  totalStudents: number;
+}
+
+export interface ExamMarkEntry {
+  mark: number | null;
+  grade: string | null;
+  isCurrentStudent: boolean;
+}
+
+export interface StudentExamDetail {
+  sheetId: string;
+  title: string;
+  year: string;
+  examDate: string;
+  gradeRanges: ResultSheetGradeRanges;
+  studentMark: number | null;
+  studentGrade: string | null;
+  studentNote: string;
+  studentRank: number | null;
+  totalStudents: number;
+  totalMarked: number;
+  allMarks: ExamMarkEntry[];
 }

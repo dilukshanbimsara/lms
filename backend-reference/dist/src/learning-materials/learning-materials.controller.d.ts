@@ -20,8 +20,8 @@ export declare class LearningMaterialsController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -43,8 +43,8 @@ export declare class LearningMaterialsController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -65,8 +65,8 @@ export declare class LearningMaterialsController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -88,8 +88,8 @@ export declare class LearningMaterialsController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -105,8 +105,8 @@ export declare class LearningMaterialsController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;

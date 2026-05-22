@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import type { ContactPerson } from "@/types";
 import type { AboutContent } from "@/types/admin";
 import { DEFAULT_ABOUT } from "@/types/admin";
+import { checkNavVisible } from "@/lib/nav-guard";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -47,6 +48,7 @@ async function getTeacherContact(): Promise<ContactPerson> {
 }
 
 export default async function ContactPage() {
+  await checkNavVisible("/contact");
   const [teacherContact] = await Promise.all([getTeacherContact()]);
 
   const primaryPhone =

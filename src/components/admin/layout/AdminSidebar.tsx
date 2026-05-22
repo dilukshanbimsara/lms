@@ -14,6 +14,8 @@ import {
   Info,
   User,
   CalendarDays,
+  Users,
+  ClipboardList,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -22,6 +24,8 @@ const SUPER_ADMIN_NAV = [
   { label: "Banners", href: "/admin/banners", icon: Image },
   { label: "Institutions", href: "/admin/institutions", icon: Building2 },
   { label: "Classes", href: "/admin/classes", icon: CalendarDays },
+  { label: "Students", href: "/admin/students", icon: Users },
+  { label: "Results", href: "/admin/results", icon: ClipboardList },
   { label: "About", href: "/admin/about", icon: Info },
   { label: "Theme", href: "/admin/theme", icon: Palette },
   { label: "Teacher", href: "/admin/teachers", icon: User },
@@ -31,6 +35,8 @@ const SUPER_ADMIN_NAV = [
 const TEACHER_NAV = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Classes", href: "/admin/classes", icon: CalendarDays },
+  { label: "Students", href: "/admin/students", icon: Users },
+  { label: "Results", href: "/admin/results", icon: ClipboardList },
   { label: "Learning Centre", href: "/admin/learning-centre", icon: BookOpen },
   { label: "Profile", href: "/admin/profile", icon: UserCircle },
 ];

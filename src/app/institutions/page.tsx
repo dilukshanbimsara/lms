@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import SectionHeading from "@/components/ui/SectionHeading";
 import InstitutionCard from "@/components/institutions/InstitutionCard";
 import type { Institution } from "@/types";
+import { checkNavVisible } from "@/lib/nav-guard";
 
 export const metadata: Metadata = {
   title: "Institutions",
@@ -54,6 +55,7 @@ async function getInstitutions(): Promise<Institution[]> {
 }
 
 export default async function InstitutionsPage() {
+  await checkNavVisible("/institutions");
   const institutions = await getInstitutions();
 
   return (

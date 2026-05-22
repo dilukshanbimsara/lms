@@ -1,4 +1,4 @@
-import type { AdminUser, Banner, AdminInstitution, Teacher, LearningMaterial, AdminClassCategory, AdminClassItem } from "@/types/admin";
+import type { AdminUser, Banner, AdminInstitution, Teacher, LearningMaterial, AdminClassCategory, AdminClassItem, Student, PaginatedStudents, StudentUser, StudentRegisterData, ResultSheet, ResultSheetSummary, StudentResultEntry, StudentMyResult, StudentExamDetail } from "@/types/admin";
 
 const BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000") + "/api";
 
@@ -17,10 +17,23 @@ export function clearToken(): void {
   localStorage.removeItem("auth_token");
 }
 
+export function getStudentToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("student_auth_token");
+}
+
+export function setStudentToken(token: string): void {
+  localStorage.setItem("student_auth_token", token);
+}
+
+export function clearStudentToken(): void {
+  localStorage.removeItem("student_auth_token");
+}
+
 // ─── Core request wrapper ──────────────────────────────────────────────────────
 
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = getToken();
+async function request<T>(path: string, options: RequestInit = {}, useStudentToken = false): Promise<T> {
+  const token = useStudentToken ? getStudentToken() : getToken();
   const res = await fetch(`${BASE}${path}`, {
     ...options,
     headers: {
@@ -355,6 +368,7 @@ export const materials = {
 interface ApiClassItem {
   id: string;
   subject: string;
+  subjectCode?: string;
   level: string;
   day: string;
   time: string;
@@ -379,6 +393,7 @@ function mapClassItem(i: ApiClassItem): AdminClassItem {
   return {
     id: i.id,
     subject: i.subject,
+    subjectCode: i.subjectCode,
     level: i.level,
     day: i.day,
     time: i.time,
@@ -406,8 +421,9 @@ function toClassCategoryPayload(data: Omit<AdminClassCategory, "id">) {
     icon: data.icon,
     description: data.description,
     sortOrder: data.sortOrder,
-    items: data.items.map(({ subject, level, day, time, fee, venue, seats, notes }) => ({
+    items: data.items.map(({ subject, subjectCode, level, day, time, fee, venue, seats, notes }) => ({
       subject,
+      ...(subjectCode ? { subjectCode } : {}),
       level,
       day,
       time,
@@ -454,4 +470,125 @@ export const siteSettings = {
       method: "PUT",
       body: JSON.stringify({ value }),
     }),
+};
+
+// ─── Public endpoints (no auth) ────────────────────────────────────────────────
+
+export const publicClasses = {
+  list: async (): Promise<AdminClassCategory[]> => {
+    try {
+      const res = await fetch(`${BASE}/classes-public`, { cache: "no-store" });
+      if (!res.ok) return [];
+      const data = await res.json() as ApiClassCategory[];
+      return data.map(mapClassCategory);
+    } catch {
+      return [];
+    }
+  },
+};
+
+export const publicInstitutions = {
+  list: async (): Promise<AdminInstitution[]> => {
+    try {
+      const res = await fetch(`${BASE}/institutions-public`, { cache: "no-store" });
+      if (!res.ok) return [];
+      const data = await res.json() as ApiInstitution[];
+      return data.map(mapInstitution);
+    } catch {
+      return [];
+    }
+  },
+};
+
+// ─── Students ──────────────────────────────────────────────────────────────────
+
+export const studentAuth = {
+  login: (email: string, password: string) =>
+    request<{ access_token: string; student: StudentUser }>("/auth/student-login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    }),
+};
+
+export const students = {
+  register: (data: StudentRegisterData): Promise<Student> =>
+    request<Student>("/students/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  list: (params?: {
+    status?: string;
+    page?: number;
+    limit?: number;
+    search?: string;
+    examYear?: string;
+    examLevel?: string;
+  }): Promise<PaginatedStudents> => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set("status", params.status);
+    if (params?.page) qs.set("page", String(params.page));
+    if (params?.limit) qs.set("limit", String(params.limit));
+    if (params?.search) qs.set("search", params.search);
+    if (params?.examYear) qs.set("examYear", params.examYear);
+    if (params?.examLevel) qs.set("examLevel", params.examLevel);
+    const q = qs.toString();
+    return request<PaginatedStudents>(`/students${q ? `?${q}` : ""}`);
+  },
+
+  get: (id: string): Promise<Student> =>
+    request<Student>(`/students/${id}`),
+
+  approve: (id: string): Promise<Student> =>
+    request<Student>(`/students/${id}/approve`, { method: "PATCH" }),
+
+  reject: (id: string): Promise<Student> =>
+    request<Student>(`/students/${id}/reject`, { method: "PATCH" }),
+
+  toggleStatus: (id: string): Promise<Student> =>
+    request<Student>(`/students/${id}/toggle-status`, { method: "PATCH" }),
+
+  delete: (id: string): Promise<void> =>
+    request<void>(`/students/${id}`, { method: "DELETE" }),
+
+  me: (): Promise<Student> =>
+    request<Student>("/students/me", {}, true),
+
+  updateProfile: (data: { profileImageUrl?: string; name?: string; phone?: string; address?: string }): Promise<Student> =>
+    request<Student>("/students/me/profile", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }, true),
+};
+
+// ─── Student Results (student-token endpoints) ────────────────────────────────
+
+export const studentResults = {
+  list: (): Promise<StudentMyResult[]> =>
+    request<StudentMyResult[]>("/student-results", {}, true),
+
+  getDetail: (sheetId: string): Promise<StudentExamDetail> =>
+    request<StudentExamDetail>(`/student-results/${sheetId}`, {}, true),
+};
+
+// ─── Results ──────────────────────────────────────────────────────────────────
+
+export const results = {
+  list: (): Promise<ResultSheetSummary[]> =>
+    request("/results"),
+
+  get: (id: string): Promise<ResultSheet> =>
+    request(`/results/${id}`),
+
+  create: (data: Omit<ResultSheet, "id" | "createdAt" | "updatedAt">): Promise<ResultSheet> =>
+    request("/results", { method: "POST", body: JSON.stringify(data) }),
+
+  update: (id: string, data: Omit<ResultSheet, "id" | "createdAt" | "updatedAt">): Promise<ResultSheet> =>
+    request(`/results/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+
+  remove: (id: string): Promise<void> =>
+    request(`/results/${id}`, { method: "DELETE" }),
+
+  loadStudents: (institutionIds: string[], year: string): Promise<StudentResultEntry[]> =>
+    request(`/results/students?institutionIds=${institutionIds.join(",")}&year=${encodeURIComponent(year)}`),
 };

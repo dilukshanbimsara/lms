@@ -13,4 +13,14 @@ export declare class AuthService {
             role: import(".prisma/client").$Enums.Role;
         };
     }>;
+    studentLogin(email: string, password: string): Promise<{
+        access_token: string;
+        student: {
+            id: string;
+            name: string;
+            email: string;
+            studentNumber: string;
+            status: "ACTIVE";
+        };
+    }>;
 }

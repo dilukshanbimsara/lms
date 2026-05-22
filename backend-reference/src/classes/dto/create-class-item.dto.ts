@@ -6,6 +6,10 @@ export class CreateClassItemDto {
   subject: string;
 
   @IsString()
+  @IsOptional()
+  subjectCode?: string;
+
+  @IsString()
   @IsNotEmpty()
   level: string;
 

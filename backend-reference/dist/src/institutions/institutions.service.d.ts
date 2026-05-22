@@ -7,11 +7,11 @@ export declare class InstitutionsService {
     findAll(): import(".prisma/client").Prisma.PrismaPromise<({
         timetable: {
             id: string;
+            subject: string;
+            institutionId: string;
             day: string;
             time: string;
-            subject: string;
             level: string;
-            institutionId: string;
         }[];
     } & {
         id: string;
@@ -25,11 +25,11 @@ export declare class InstitutionsService {
     findOne(id: string): Promise<{
         timetable: {
             id: string;
+            subject: string;
+            institutionId: string;
             day: string;
             time: string;
-            subject: string;
             level: string;
-            institutionId: string;
         }[];
     } & {
         id: string;
@@ -43,11 +43,11 @@ export declare class InstitutionsService {
     create(dto: CreateInstitutionDto): import(".prisma/client").Prisma.Prisma__InstitutionClient<{
         timetable: {
             id: string;
+            subject: string;
+            institutionId: string;
             day: string;
             time: string;
-            subject: string;
             level: string;
-            institutionId: string;
         }[];
     } & {
         id: string;
@@ -61,11 +61,11 @@ export declare class InstitutionsService {
     update(id: string, dto: UpdateInstitutionDto): Promise<{
         timetable: {
             id: string;
+            subject: string;
+            institutionId: string;
             day: string;
             time: string;
-            subject: string;
             level: string;
-            institutionId: string;
         }[];
     } & {
         id: string;

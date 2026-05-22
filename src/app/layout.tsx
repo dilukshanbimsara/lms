@@ -44,13 +44,12 @@ async function getVisibleNavItems(): Promise<NavItem[]> {
       where: { key: "navItems" },
     });
     if (setting) {
-      const stored = setting.value as unknown as NavToggle[];
-      return stored
-        .filter((item) => item.visible)
-        .map(({ label, href }) => ({ label, href }));
+      const stored = setting.value as unknown as Array<{ href: string; visible: boolean }>;
+      const visibilityMap = Object.fromEntries(stored.map((i) => [i.href, i.visible]));
+      return staticNavItems.filter((item) => visibilityMap[item.href] !== false);
     }
   } catch {
-    // DB unavailable — fall back to static list
+    // DB unavailable — show all items
   }
   return staticNavItems;
 }

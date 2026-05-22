@@ -25,6 +25,13 @@ enum MaterialType {
   VIDEO
 }
 
+enum StudentStatus {
+  PENDING
+  ACTIVE
+  DISABLED
+  REJECTED
+}
+
 // ─── Models ─────────────────────────────────────────────────
 
 model User {
@@ -65,6 +72,7 @@ model Institution {
   updatedAt DateTime       @updatedAt
 
   timetable TimetableRow[]
+  students  Student[]
 
   @@map("institutions")
 }
@@ -120,21 +128,80 @@ model ClassCategory {
 }
 
 model ClassItem {
-  id         String        @id @default(uuid())
-  subject    String
-  level      String
-  day        String
-  time       String
-  fee        String
-  venue      String?
-  seats      Int?
-  notes      String?       @db.Text
-  sortOrder  Int           @default(0)
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
+  id          String        @id @default(uuid())
+  subject     String
+  subjectCode String?
+  level       String
+  day         String
+  time        String
+  fee         String
+  venue       String?
+  seats       Int?
+  notes       String?       @db.Text
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
-  category   ClassCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId String
+  category    ClassCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String
+  students    Student[]
 
   @@map("class_items")
+}
+
+model Student {
+  id              String        @id @default(uuid())
+  email           String        @unique
+  password        String
+  name            String
+  phone           String
+  address         String
+  examYear        String
+  examLevel       String
+  subject         String
+  subjectCode     String
+  institutionId   String?
+  studentNumber   String        @unique
+  status          StudentStatus @default(PENDING)
+  profileImageUrl String?
+  classItemId     String?
+  classItem       ClassItem?    @relation(fields: [classItemId], references: [id], onDelete: SetNull)
+  institution     Institution?  @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  results         StudentResult[]
+
+  @@map("students")
+}
+
+model ResultSheet {
+  id             String          @id @default(uuid())
+  title          String
+  year           String
+  examDate       String          @default("")
+  description    String?
+  gradeRanges    Json
+  institutionIds Json
+  results        StudentResult[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@map("result_sheets")
+}
+
+model StudentResult {
+  id            String      @id @default(uuid())
+  resultSheetId String
+  resultSheet   ResultSheet @relation(fields: [resultSheetId], references: [id], onDelete: Cascade)
+  studentId     String
+  student       Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  mark          Float?
+  grade         String?
+  note          String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([resultSheetId, studentId])
+  @@map("student_results")
 }

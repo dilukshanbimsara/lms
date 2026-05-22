@@ -5,15 +5,12 @@ import { ConfigService } from '@nestjs/config';
 import { Role } from './roles.enum';
 
 interface JwtPayload {
-  sub: string;   // user.id
+  sub: string;
   email: string;
-  role: Role;
+  role: Role | 'STUDENT';
+  type?: 'admin' | 'student';
 }
 
-/**
- * JwtStrategy — validates the Bearer token from the Authorization header.
- * The validated payload is attached to req.user by Passport.
- */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(config: ConfigService) {
@@ -25,7 +22,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    // Returned object becomes req.user
-    return { id: payload.sub, email: payload.email, role: payload.role };
+    return {
+      id: payload.sub,
+      email: payload.email,
+      role: payload.role,
+      type: payload.type ?? 'admin',
+    };
   }
 }

@@ -8,6 +8,8 @@ import { LearningMaterialsModule } from './learning-materials/learning-materials
 import { SiteSettingsModule } from './site-settings/site-settings.module';
 import { UsersModule } from './users/users.module';
 import { ClassesModule } from './classes/classes.module';
+import { StudentsModule } from './students/students.module';
+import { ResultsModule } from './results/results.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { ClassesModule } from './classes/classes.module';
     LearningMaterialsModule,
     SiteSettingsModule,
     ClassesModule,
+    StudentsModule,
+    ResultsModule,
   ],
 })
 export class AppModule {}

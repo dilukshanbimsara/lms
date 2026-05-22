@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, GraduationCap } from "lucide-react";
+import { Menu, X, GraduationCap, LogOut, User } from "lucide-react";
 import type { NavItem } from "@/types";
 
 interface NavbarProps {
@@ -14,6 +14,8 @@ interface NavbarProps {
 export default function Navbar({ navItems, siteName = "TutioLMS" }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [studentLoggedIn, setStudentLoggedIn] = useState(false);
+  const [studentFirstName, setStudentFirstName] = useState("");
   const pathname = usePathname();
 
   useEffect(() => {
@@ -25,6 +27,57 @@ export default function Navbar({ navItems, siteName = "TutioLMS" }: NavbarProps)
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const raw = localStorage.getItem("student_user");
+    const token = localStorage.getItem("student_auth_token");
+    if (raw && token) {
+      try {
+        const s = JSON.parse(raw) as { name?: string };
+        setStudentLoggedIn(true);
+        setStudentFirstName(s.name?.split(" ")[0] ?? "Student");
+      } catch {
+        setStudentLoggedIn(false);
+      }
+    } else {
+      setStudentLoggedIn(false);
+    }
+  }, [pathname]);
+
+  const handleStudentLogout = () => {
+    localStorage.removeItem("student_user");
+    localStorage.removeItem("student_auth_token");
+    setStudentLoggedIn(false);
+    window.location.href = "/login";
+  };
+
+  // For logged-in students: Home → Better Me → Profile → remaining nav items
+  const displayItems: NavItem[] = studentLoggedIn
+    ? [
+        ...(navItems.length > 0 ? [navItems[0]] : []),   // Home first
+        { label: "Better Me", href: "/student/better-me" },
+        { label: "Profile", href: "/student/profile" },
+        ...navItems.slice(1),                             // About, Classes, Results, Contact…
+      ]
+    : navItems.filter((item) => item.href !== "/learning-centre");
+
+  const linkCls = (href: string) => {
+    const isActive = pathname === href;
+    return `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+      isActive
+        ? "bg-primary text-white"
+        : "text-gray-700 hover:bg-primary/10 hover:text-primary"
+    }`;
+  };
+
+  const mobileLinkCls = (href: string) => {
+    const isActive = pathname === href;
+    return `block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+      isActive
+        ? "bg-primary text-white"
+        : "text-gray-700 hover:bg-primary/10 hover:text-primary"
+    }`;
+  };
 
   return (
     <header
@@ -45,24 +98,41 @@ export default function Navbar({ navItems, siteName = "TutioLMS" }: NavbarProps)
 
           {/* Desktop nav */}
           <ul className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? "bg-primary text-white"
-                        : "text-gray-700 hover:bg-primary/10 hover:text-primary"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
+            {displayItems.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className={linkCls(item.href)}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
+
+          {/* Desktop right: Login / Student chip + Logout */}
+          <div className="hidden md:flex items-center gap-2">
+            {studentLoggedIn ? (
+              <>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 rounded-lg">
+                  <User size={14} className="text-primary" />
+                  <span className="text-sm font-medium text-primary">{studentFirstName}</span>
+                </div>
+                <button
+                  onClick={handleStudentLogout}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                >
+                  <LogOut size={14} />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="px-4 py-2 text-sm font-semibold text-white bg-accent hover:bg-accent/90 rounded-lg transition-colors"
+                style={{ backgroundColor: "hsl(var(--color-accent))", color: "#fff" }}
+              >
+                Student Login
+              </Link>
+            )}
+          </div>
 
           {/* Mobile hamburger */}
           <button
@@ -77,27 +147,36 @@ export default function Navbar({ navItems, siteName = "TutioLMS" }: NavbarProps)
         {/* Mobile menu */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? "max-h-80 opacity-100 pb-4" : "max-h-0 opacity-0"
+            isMenuOpen ? "max-h-96 opacity-100 pb-4" : "max-h-0 opacity-0"
           }`}
         >
           <ul className="flex flex-col gap-1 pt-2 border-t border-gray-100">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? "bg-primary text-white"
-                        : "text-gray-700 hover:bg-primary/10 hover:text-primary"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
+            {displayItems.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className={mobileLinkCls(item.href)}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+            <li className="pt-2 border-t border-gray-100 mt-1">
+              {studentLoggedIn ? (
+                <button
+                  onClick={handleStudentLogout}
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                >
+                  <LogOut size={14} />
+                  Logout ({studentFirstName})
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  className="block px-4 py-2.5 text-sm font-semibold text-center text-white rounded-lg transition-colors"
+                  style={{ backgroundColor: "hsl(var(--color-accent))" }}
+                >
+                  Student Login
+                </Link>
+              )}
+            </li>
           </ul>
         </div>
       </nav>

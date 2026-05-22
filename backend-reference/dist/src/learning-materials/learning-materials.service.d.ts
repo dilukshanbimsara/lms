@@ -7,8 +7,8 @@ export declare class LearningMaterialsService {
     findAllPublic(): import(".prisma/client").Prisma.PrismaPromise<{
         id: string;
         createdAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -24,8 +24,8 @@ export declare class LearningMaterialsService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -42,8 +42,8 @@ export declare class LearningMaterialsService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -60,8 +60,8 @@ export declare class LearningMaterialsService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -78,8 +78,8 @@ export declare class LearningMaterialsService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -96,8 +96,8 @@ export declare class LearningMaterialsService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;
@@ -108,8 +108,8 @@ export declare class LearningMaterialsService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         subject: string;
+        title: string;
         level: string;
         type: import(".prisma/client").$Enums.MaterialType;
         content: string;

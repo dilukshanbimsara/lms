@@ -47,6 +47,7 @@ const emptyItem = (): AdminClassItem & { _key: string; timeStart: string; timeEn
   _key: `item-${Date.now()}-${Math.random()}`,
   id: "",
   subject: "",
+  subjectCode: "",
   level: "A/L",
   day: "",
   time: "",
@@ -205,6 +206,7 @@ export default function ClassCategoryForm({ initialData, onSave, onCancel }: Cla
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-2 py-2 text-left text-gray-500 font-semibold">Subject</th>
+                <th className="px-2 py-2 text-left text-gray-500 font-semibold w-20">Code</th>
                 <th className="px-2 py-2 text-left text-gray-500 font-semibold w-20">Level</th>
                 <th className="px-2 py-2 text-left text-gray-500 font-semibold">Day</th>
                 <th className="px-2 py-2 text-left text-gray-500 font-semibold">Time</th>
@@ -225,6 +227,17 @@ export default function ClassCategoryForm({ initialData, onSave, onCancel }: Cla
                       onChange={(e) => updateItem(item._key, "subject", e.target.value)}
                       placeholder="Combined Maths"
                       className={cellInput}
+                    />
+                  </td>
+                  <td className="px-1 py-1.5">
+                    <input
+                      type="text"
+                      value={item.subjectCode ?? ""}
+                      onChange={(e) => updateItem(item._key, "subjectCode", e.target.value.toUpperCase())}
+                      placeholder="GEO"
+                      maxLength={10}
+                      title="Short code used for student registration numbers"
+                      className={cellInput + " uppercase"}
                     />
                   </td>
                   <td className="px-1 py-1.5">
@@ -327,7 +340,7 @@ export default function ClassCategoryForm({ initialData, onSave, onCancel }: Cla
               ))}
               {items.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-3 py-4 text-center text-gray-400">
+                  <td colSpan={10} className="px-3 py-4 text-center text-gray-400">
                     No items. Click &ldquo;Add Item&rdquo; to begin.
                   </td>
                 </tr>

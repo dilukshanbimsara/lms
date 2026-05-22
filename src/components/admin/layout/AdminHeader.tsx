@@ -7,6 +7,8 @@ const ROUTE_LABELS: Record<string, string> = {
   "/admin/dashboard": "Dashboard",
   "/admin/banners": "Banner Management",
   "/admin/institutions": "Institution Management",
+  "/admin/classes": "Classes",
+  "/admin/students": "Student Management",
   "/admin/about": "About Section",
   "/admin/theme": "Theme Settings",
   "/admin/teachers": "Teacher",

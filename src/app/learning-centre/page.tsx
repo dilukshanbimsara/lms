@@ -3,6 +3,7 @@ import { BookOpen } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import DocumentCard from "@/components/learning-centre/DocumentCard";
 import type { LearningDocument } from "@/types";
+import { checkNavVisible } from "@/lib/nav-guard";
 
 export const metadata: Metadata = {
   title: "Learning Centre",
@@ -59,6 +60,7 @@ async function getPublicMaterials(): Promise<LearningDocument[]> {
 }
 
 export default async function LearningCentrePage() {
+  await checkNavVisible("/learning-centre");
   const documents = await getPublicMaterials();
 
   const aLevelDocs = documents.filter((d) => d.level === "A/L");

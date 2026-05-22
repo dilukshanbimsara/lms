@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import SectionHeading from "@/components/ui/SectionHeading";
 import AccordionList from "@/components/classes/AccordionList";
 import type { ClassCategory } from "@/types";
+import { checkNavVisible } from "@/lib/nav-guard";
 
 export const metadata: Metadata = {
   title: "Classes",
@@ -24,6 +25,7 @@ async function getClasses(): Promise<ClassCategory[]> {
 }
 
 export default async function ClassesPage() {
+  await checkNavVisible("/classes");
   const categories = await getClasses();
 
   return (

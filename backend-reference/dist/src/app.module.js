@@ -17,6 +17,8 @@ const learning_materials_module_1 = require("./learning-materials/learning-mater
 const site_settings_module_1 = require("./site-settings/site-settings.module");
 const users_module_1 = require("./users/users.module");
 const classes_module_1 = require("./classes/classes.module");
+const students_module_1 = require("./students/students.module");
+const results_module_1 = require("./results/results.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -32,6 +34,8 @@ exports.AppModule = AppModule = __decorate([
             learning_materials_module_1.LearningMaterialsModule,
             site_settings_module_1.SiteSettingsModule,
             classes_module_1.ClassesModule,
+            students_module_1.StudentsModule,
+            results_module_1.ResultsModule,
         ],
     })
 ], AppModule);
